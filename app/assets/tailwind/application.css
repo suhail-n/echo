@@ -1,1 +1,19 @@
 @import "tailwindcss";
+@plugin "./daisyui.js";
+@plugin "./daisyui-theme.js";
+
+
+/* This will create a .group-open class name. */
+@custom-variant group-open {
+
+    /* copied this selector by hoverring over the builtin group-open tailwind css class.
+    Added .open to it so that it can be used with the .open class name in the html.
+    This will by default only work with dialog html but we want to also work with .open class.
+
+    The selector means: target any decendant of the group class that has open class or has the open attribute or is in popover-open or open state.
+    */
+    &:is(:where(.group):is(.open, [open], :popover-open, :open) *) {
+        /* allows group-open followed by any tailwind css classname such as group-open:text-2xl */
+        @slot;
+    }
+}

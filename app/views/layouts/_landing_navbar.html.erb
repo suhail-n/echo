@@ -1,0 +1,104 @@
+<nav class="w-full bg-[#FFF2F2] flex sticky top-0 z-10 justify-between md:justify-around lg:justify-around p-4">
+  <%# nav brand %>
+  <h2 class="text-2xl font-bold">
+    <a href="#home" onclick="setActiveLink(this, link='#home')";toggleMenu()">Echo</a>
+  </h2>
+  <button id="hamburger" class="md:hidden cursor-pointer group" onclick="toggleMenu()">
+    <div class="relative top-0 h-1 w-8 rounded-full bg-gray-700 transition-all group-open:top-2 group-open:rotate-45"></div>
+    <div class="mt-1 h-1 w-8 rounded-full bg-gray-700 opacity-100 transition-all group-open:opacity-0"></div>
+    <div class="relative top-0 mt-1 h-1 w-8 rounded-full bg-gray-700 transition-all group-open:-top-2 group-open:-rotate-45"></div>
+  </button>
+  <%# nav links mobile  %>
+  <ul id="mobileMenu" class="hidden md:hidden absolute top-full left-0 right-0 w-full flex flex-col items-center gap-4 bg-[#FFF2F2] pb-10">
+    <li>
+      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#home" onclick="setActiveLink(this);toggleMenu()">Home</a>
+    </li>
+    <li>
+      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#features" onclick="setActiveLink(this);toggleMenu()">Features</a>
+    </li>
+    <li class="w-1/3 lg:w-auto">
+      <%= link_to "Log In", "#signin", class: "block text-center bg-gray-300/60 px-4 py-2 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-amber-600" %>
+    </li>
+    <li class="w-1/3 lg:w-auto">
+      <%= link_to "Sign Up", "#signup", class: "block text-center bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
+    </li>
+  </ul>
+  <%# nav links desktop %>
+  <ul class="md:flex justify-center items-center gap-4 hidden">
+    <li>
+      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#home" onclick="setActiveLink(this)">Home</a>
+    </li>
+    <li>
+      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#features" onclick="setActiveLink(this)">Features</a>
+    </li>
+  </ul>
+  <ul class="md:flex justify-center items-center gap-2 hidden">
+    <li>
+      <%= link_to "Log In", "#signin", class: "bg-gray-300/60 px-4 py-2 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-amber-600" %>
+    </li>
+    <li>
+      <%= link_to "Sign Up", "#signup", class: "bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
+    </li>
+  </ul>
+</nav>
+<script>
+  function toggleMenu() {
+    const menu = document.getElementById('mobileMenu');
+    const hamburger = document.getElementById('hamburger');
+    menu.classList.toggle('hidden');
+    hamburger.classList.toggle('open'); // This triggers the group-open variant
+  }
+  function setActiveLink(clickedLink, link=null) {
+    // Prevent default behavior
+    event.preventDefault();
+    let targetLink;
+    if(link) {
+      targetLink = document.querySelectorAll('.nav-link[href="' + link + '"]');
+    } else {
+      targetLink = [clickedLink];
+    }
+    // Remove active class from all links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('text-orange-700/80', 'underline', 'underline-offset-4');
+    });
+
+    // Add active class to clicked link
+    targetLink.forEach(link => {
+      link.classList.add('text-orange-700/80', 'underline', 'underline-offset-4');
+    });
+
+    // Update URL hash
+    // scroll to the section
+    const href = targetLink[0].getAttribute('href');
+    const targetSection = document.querySelector(`${href}`);
+    if (targetSection) {
+      targetSection.scrollIntoView({ behavior: 'smooth' });
+    }
+    // Update URL hash after scroll is complete
+    setTimeout(() => {
+      window.location.hash = href.substring(1);
+    }, 500);
+  }
+  // Set Home as active by default
+  document.addEventListener('DOMContentLoaded', () => {
+    // check url path
+    const path = window.location.hash;
+    if (path === '#home' || path === '') {
+      const homeLinks = document.querySelectorAll('.nav-link[href="#home"]');
+      homeLinks.forEach(homeLink => {
+        homeLink.classList.add('text-orange-700/80', 'underline', 'underline-offset-4');
+      });
+    }
+    if (path === '#features') {
+      const featureLinks = document.querySelectorAll('.nav-link[href="#features"]');
+      featureLinks.forEach(featureLink => {
+        featureLink.classList.add('text-orange-700/80', 'underline', 'underline-offset-4');
+      });
+    } else {
+      const homeLinks = document.querySelectorAll('.nav-link[href="#home"]');
+      homeLinks.forEach(homeLink => {
+        homeLink.classList.add('text-orange-700/80', 'underline', 'underline-offset-4');
+      });
+    }
+  });
+</script>

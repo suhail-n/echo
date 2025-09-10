@@ -1,1 +1,60 @@
-<h1 class="text-3xl text-blue-500 font-bold">Landing Page</h1>
+<section id="home" class="hero flex flex-col items-center bg-red-100/40 justify-center">
+  <div class="container mx-auto mt-28 mb-16 flex flex-col md:flex-row items-center justify-center gap-8 max-w-6xl px-6 md:px-12">
+    <div class="flex flex-col justify-center gap-4 w-full md:w-1/2 text-center md:text-left">
+      <h1 class="text-4xl md:text-5xl font-bold">Unlock Your<br>
+        Strongest Self</h1>
+      <p class="text-base md:text-lg text-gray-700">Ditch the distractions. Echo delivers pure, efficient workout tracking so you can focus on what matters: getting results</p>
+      <span>
+        <%= link_to "Get Started", "#signup", class: "inline-block bg-orange-600/90 text-white px-6 py-3 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
+      </span>
+    </div>
+    <div class="flex flex-col items-center justify-center gap-4 w-full md:w-1/2">
+      <%= image_tag("bicepcurltransp.png", class: "rounded-lg w-full max-w-2xs md:max-w-md")%>
+    </div>
+  </div>
+</section>
+<section id="features" class="flex flex-col items-center justify-center">
+  <div class="container mx-auto mt-16 mb-16 flex items-center justify-center gap-4 max-w-6xl px-6 md:px-10">
+    <div class="flex flex-col justify-center gap-4 w-full">
+      <h1 class="text-4xl md:text-5xl text-center font-bold">Why Echo?</h1>
+      <ul class="flex flex-col md:flex-row justify-center gap-8 mt-10 text-center">
+        <li class="flex flex-col gap-4 max-w-sm mx-auto">
+          <%# https://heroicons.com/outline %>
+          <div><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 mx-auto text-orange-600/90">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.429 9.75 2.25 12l4.179 2.25m0-4.5 5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0 4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0-5.571 3-5.571-3" />
+            </svg>
+          </div>
+          <p class="text-xl font-semibold uppercase">Minimal Interface</p>
+          <p>No distractions. Just the essential tools you need to log sets, reps, and weight quickly.</p>
+        </li>
+        <li class="flex flex-col gap-4 max-w-sm mx-auto">
+          <div><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 mx-auto text-amber-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" />
+            </svg>
+          </div>
+          <p class="text-xl font-semibold uppercase">Fast & Efficient</p>
+          <p>Designed for speed. Spend less time tapping and more time lifting.</p>
+        </li>
+        <li class="flex flex-col gap-4 max-w-sm mx-auto">
+          <div><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 mx-auto text-amber-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+          </div>
+          <p class="text-xl font-semibold uppercase">Track What Matters</p>
+          <p>Focus solely on your workout progress. We handle the tracking, you handle the gains.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+<section id="getstarted" class="flex flex-col items-center bg-red-100/40 justify-center">
+  <div class="container mx-auto mt-28 mb-16 flex flex-col  items-center justify-center gap-8 max-w-6xl px-6 md:px-12">
+    <h1 class="text-center text-3xl md:text-4xl font-bold">Stop Tracking Clutter. Start Seeing Results.</h1>
+    <p class=" text-center text-base md:text-lg text-gray-700 max-w-2xs md:max-w-xl">Get the minimal, powerful workout tracker designed to help you focus and achieve your goals faster. Get started with Echo now - it's free!</p>
+    <span>
+      <%= link_to "Get Started", "#signup", class: "inline-block bg-orange-600/90 text-white px-6 py-3 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
+    </span>
+    <div class="flex flex-col justify-center gap-4 w-full md:w-1/2 text-center md:text-left">
+    </div>
+  </div>
+</section>
