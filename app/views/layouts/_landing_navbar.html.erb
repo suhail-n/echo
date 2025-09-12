@@ -10,34 +10,38 @@
   </button>
   <%# nav links mobile  %>
   <ul id="mobileMenu" class="hidden md:hidden absolute top-full left-0 right-0 w-full flex flex-col items-center gap-4 bg-[#FFF2F2] pb-10">
-    <li>
-      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#home" onclick="setActiveLink(this);toggleMenu()">Home</a>
-    </li>
-    <li>
-      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#features" onclick="setActiveLink(this);toggleMenu()">Features</a>
+    <% if request.path == '/' %>
+      <li>
+        <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#home" onclick="setActiveLink(this);toggleMenu()">Home</a>
+      </li>
+      <li>
+        <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#features" onclick="setActiveLink(this);toggleMenu()">Features</a>
+      </li>
+    <% end %>
+    <li class="w-1/3 lg:w-auto">
+      <%= link_to "Log In", new_user_session_path, class: "block text-center bg-gray-300/60 px-4 py-2 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-amber-600" %>
     </li>
     <li class="w-1/3 lg:w-auto">
-      <%= link_to "Log In", "#signin", class: "block text-center bg-gray-300/60 px-4 py-2 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-amber-600" %>
-    </li>
-    <li class="w-1/3 lg:w-auto">
-      <%= link_to "Sign Up", "#signup", class: "block text-center bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "block text-center bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
     </li>
   </ul>
   <%# nav links desktop %>
   <ul class="md:flex justify-center items-center gap-4 hidden">
-    <li>
-      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#home" onclick="setActiveLink(this)">Home</a>
-    </li>
-    <li>
-      <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#features" onclick="setActiveLink(this)">Features</a>
-    </li>
+    <% if request.path == '/' %>
+      <li>
+        <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#home" onclick="setActiveLink(this)">Home</a>
+      </li>
+      <li>
+        <a class="nav-link hover:text-orange-700/50 hover:underline underline-offset-4" href="#features" onclick="setActiveLink(this)">Features</a>
+      </li>
+    <% end %>
   </ul>
   <ul class="md:flex justify-center items-center gap-2 hidden">
     <li>
-      <%= link_to "Log In", "#signin", class: "bg-gray-300/60 px-4 py-2 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-amber-600" %>
+      <%= link_to "Log In", new_user_session_path, class: "bg-gray-300/60 px-4 py-2 rounded-full hover:bg-gray-300 focus:ring-2 focus:ring-amber-600" %>
     </li>
     <li>
-      <%= link_to "Sign Up", "#signup", class: "bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600" %>
     </li>
   </ul>
 </nav>
