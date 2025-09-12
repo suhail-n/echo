@@ -2,11 +2,9 @@
 @plugin "./daisyui.js";
 @plugin "./daisyui-theme.js";
 
-@plugin "./daisyui" {
+@plugin "./daisyui.js" {
     themes: light --default, dracula --prefersdark, dracula
 }
-
-
 
 /* This will create a .group-open class name. */
 @custom-variant group-open {
