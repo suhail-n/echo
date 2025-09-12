@@ -2,50 +2,70 @@
 <% form_url_value = defined?(form_url) ? form_url : registration_path(resource_name) %>
 <% submit_text_value = defined?(submit_text) ? submit_text : "Submit" %>
 <% show_confirm = defined?(show_password_confirmation) && show_password_confirmation %>
-<div class="container mx-auto mt-28 mb-16 flex flex-col items-center justify-center max-w-md px-6">
-  <div class="w-full bg-white rounded-lg shadow-md p-8">
-    <h1 class="text-3xl font-bold text-center mb-6"><%= submit_text_value %></h1>
-    <%= form_for(resource, as: resource_name, url: form_url_value, html: { class: "flex flex-col gap-4" }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
-      <% flash.each do |type, msg| %>
-        <div class="mb-4 p-3 rounded <%=
-      type == 'alert' ? 'alert alert-error alert-outline' : 'alert alert-success alert-outline'
-    %>">
-          <%= msg %>
-        </div>
-      <% end %>
-      <div class="field">
-        <%= f.label :email, class: "block text-gray-700 text-sm font-bold mb-2" %>
-        <%= f.email_field :email, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-amber-600", autofocus: true, autocomplete: "email" %>
-      </div>
-      <div class="field">
-        <div class="flex gap-2 items-baseline">
-          <%= f.label :password, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <% if @minimum_password_length && show_confirm %>
-            <em class="text-sm">(<%= @minimum_password_length %> characters minimum)</em>
+<div class="min-h-screen hero bg-base-200">
+  <div class="hero-content flex-col">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold">
+        <%= submit_text_value %>
+      </h1>
+      <p class="py-6 text-base-content/70">
+        <% if show_confirm %>
+          Create your account to get started
+        <% else %>
+          Welcome back! Please sign in to your account
+        <% end %>
+      </p>
+    </div>
+    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <div class="card-body">
+        <%= form_for(resource, as: resource_name, url: form_url_value) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+          <% flash.each do |type, msg| %>
+            <div class="alert <%= type == 'alert' ? 'alert-error' : 'alert-success' %> mb-4">
+              <span><%= msg %></span>
+            </div>
           <% end %>
+          <div class="form-control mb-4">
+            <label class="label pb-2">
+              <span class="label-text">Email</span>
+            </label>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input input-bordered", placeholder: "your@email.com" %>
+          </div>
+          <div class="form-control mb-4">
+            <label class="label pb-2">
+              <span class="label-text">Password</span>
+              <% if @minimum_password_length && show_confirm %>
+                <span class="label-text-alt">(<%= @minimum_password_length %> characters minimum)</span>
+              <% end %>
+            </label>
+            <%= f.password_field :password, autocomplete: (show_confirm ? "new-password" : "current-password"), class: "input input-bordered", placeholder: show_confirm ? "Enter your password" : "Your password" %>
+          </div>
+          <% if show_confirm %>
+            <div class="form-control mb-6">
+              <label class="label pb-2">
+                <span class="label-text">Confirm Password</span>
+              </label>
+              <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input input-bordered", placeholder: "Confirm your password" %>
+            </div>
+          <% end %>
+          <%# Remember me for sessions (only if Devise rememberable is enabled and caller requested it) %>
+          <% if devise_mapping.rememberable? && (defined?(show_remember_me) && show_remember_me) %>
+            <div class="form-control mb-4">
+              <label class="cursor-pointer label">
+                <%= f.check_box :remember_me, class: "checkbox mr-2" %>
+                <span class="label-text">Remember me</span>
+              </label>
+            </div>
+          <% end %>
+          <div class="form-control mt-6">
+            <%= f.submit submit_text_value, class: "btn btn-primary" %>
+          </div>
+        <% end %>
+        <div class="divider"></div>
+        <div class="flex flex-col space-y-2 text-center">
+          <%= render "devise/shared/links" %>
         </div>
-        <%= f.password_field :password, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-amber-600", autocomplete: (show_confirm ? "new-password" : "current-password") %>
       </div>
-      <% if show_confirm %>
-        <div class="field">
-          <%= f.label :password_confirmation, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= f.password_field :password_confirmation, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-amber-600", autocomplete: "new-password" %>
-        </div>
-      <% end %>
-      <%# Remember me for sessions (only if Devise rememberable is enabled and caller requested it) %>
-      <% if devise_mapping.rememberable? && (defined?(show_remember_me) && show_remember_me) %>
-        <div class="field form-control">
-          <label class="cursor-pointer label">
-            <%= f.check_box :remember_me, class: "checkbox mr-2" %>
-            <span class="label-text">Remember me</span>
-          </label>
-        </div>
-      <% end %>
-      <div class="actions w-full mb-1">
-        <%= f.submit submit_text_value, class: "w-full bg-orange-600/90 text-white px-4 py-2 rounded-full hover:opacity-80 focus:ring-2 focus:ring-amber-600 cursor-pointer" %>
-      </div>
-    <% end %>
-    <%= render "devise/shared/links" %>
+    </div>
   </div>
 </div>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html data-theme="light">
+  <head>
+    <title><%= content_for(:title) || "Echo" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <main class="bg-base-200 min-h-screen">
+      <div class="navbar bg-base-100 shadow-lg">
+        <div class="navbar-start">
+          <%= link_to root_path, class: "btn btn-ghost text-xl" do %>
+            Echo
+          <% end %>
+        </div>
+        <div class="navbar-center">
+          <!-- Empty center section -->
+        </div>
+        <div class="navbar-end">
+          <div class="hidden lg:flex gap-2">
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-ghost" %>
+            <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary" %>
+          </div>
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
+              </svg>
+            </div>
+            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-4 shadow-lg border border-base-300">
+              <li class="mb-2">
+                <%= link_to "Sign In", new_user_session_path, class: "btn btn-ghost btn-sm w-full justify-start" %>
+              </li>
+              <li>
+                <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-primary btn-sm w-full justify-start" %>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <%= yield %>
+    </main>
+  </body>
+</html>

@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
       "landing"
     elsif devise_controller?
       # return "auth" if new_user_session GET    /users/sign_in(.:format) devise/sessions#new,  new_user_registration GET    /users/sign_up(.:format) devise/registrations#new, passwords#new
-      "landing" if (controller_name == "sessions" && action_name == "new") || (controller_name == "registrations" && action_name == "new") || (controller_name == "passwords" && action_name == "new")
+      "auth_layout" if (controller_name == "sessions" && action_name == "new") || (controller_name == "registrations" && action_name == "new") || (controller_name == "passwords" && action_name == "new")
     else
       "application"
     end
