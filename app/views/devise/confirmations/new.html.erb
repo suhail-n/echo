@@ -1,16 +1,30 @@
-<h2>Resend confirmation instructions</h2>
-
-<%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
-  <%= render "devise/shared/error_messages", resource: resource %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email) %>
+<div class="min-h-screen hero bg-base-200">
+  <div class="hero-content flex-col">
+    <div class="text-center">
+      <h2 class="text-4xl font-bold">
+        Resend confirmation instructions
+      </h2>
+      <p class="py-6 text-base-content/70">
+        Enter your email address and we'll send you a new confirmation link
+      </p>
+    </div>
+    <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+      <div class="card-body">
+        <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+          <div class="form-control mb-6">
+            <%= f.label :email, "Email", class: "label pb-2" %>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "input input-bordered", placeholder: "your@email.com" %>
+          </div>
+          <div class="form-control mt-6">
+            <%= f.submit "Resend confirmation", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+        <div class="divider"></div>
+        <div class="flex flex-col space-y-2 text-center">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit "Resend confirmation instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

@@ -26,35 +26,31 @@
             </div>
           <% end %>
           <div class="form-control mb-4">
-            <label class="label pb-2">
-              <span class="label-text">Email</span>
-            </label>
+            <%= f.label :email, class: "label pb-2" %>
             <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input input-bordered", placeholder: "your@email.com" %>
           </div>
           <div class="form-control mb-4">
-            <label class="label pb-2">
+            <%= f.label :password, class: "label pb-2" do %>
               <span class="label-text">Password</span>
               <% if @minimum_password_length && show_confirm %>
                 <span class="label-text-alt">(<%= @minimum_password_length %> characters minimum)</span>
               <% end %>
-            </label>
+            <% end %>
             <%= f.password_field :password, autocomplete: (show_confirm ? "new-password" : "current-password"), class: "input input-bordered", placeholder: show_confirm ? "Enter your password" : "Your password" %>
           </div>
           <% if show_confirm %>
             <div class="form-control mb-6">
-              <label class="label pb-2">
-                <span class="label-text">Confirm Password</span>
-              </label>
+              <%= f.label :password_confirmation, class: "label pb-2" %>
               <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "input input-bordered", placeholder: "Confirm your password" %>
             </div>
           <% end %>
           <%# Remember me for sessions (only if Devise rememberable is enabled and caller requested it) %>
           <% if devise_mapping.rememberable? && (defined?(show_remember_me) && show_remember_me) %>
             <div class="form-control mb-4">
-              <label class="cursor-pointer label">
+              <%= f.label :remember_me, class: "cursor-pointer label" do %>
                 <%= f.check_box :remember_me, class: "checkbox mr-2" %>
                 <span class="label-text">Remember me</span>
-              </label>
+              <% end %>
             </div>
           <% end %>
           <div class="form-control mt-6">
