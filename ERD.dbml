@@ -1,0 +1,123 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table users {
+  id integer [primary key]
+  email varchar
+  encrypted_password varchar
+  reset_password_token varchar
+  reset_password_sent_at datetime
+  remember_created_at datetime
+  confirmation_token varchar
+  confirmed_at datetime
+  confirmation_sent_at datetime
+  unconfirmed_email string
+  created_at timestamp
+  updated_at timestamp
+}
+Ref: users.id < workout_plans.user_id
+
+Table exercises {
+  id integer [primary key]
+  name varchar 
+}
+// one to many
+Ref: exercises.id < muscles_worked.exercise_id
+
+Table muscles {
+  id integer [primary key]
+  name varchar 
+}
+Ref: muscles.id < muscles_worked.muscles_id
+
+Table muscles_worked {
+  id integer [primary key]
+  exercise_id integer [not null]
+  muscles_id integer [not null]
+  type varchar [not null] // primary or secondary
+}
+
+Table workout_plans {
+  id integer [primary key]
+  name varchar
+  user_id integer [not null]
+  is_template boolean [default: false, not null]
+  is_published boolean [default: false, not null]
+  created_at timestamp
+  updated_at timestamp
+}
+Ref: workout_plans.id < workout_days.workout_plan_id
+
+Table workout_days {
+  id integer [primary key]
+  name varchar
+  order integer
+  workout_plan_id integer [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+Ref: workout_days.id < workout_day_items.workout_day_id
+
+Table workout_day_items {
+  id integer [primary key]
+  workout_day_id integer [not null]
+  exercise_id integer [not null]
+  order integer
+  superset_group integer [null]
+  planned_sets integer [not null]
+  planned_reps integer [not null]
+  created_at timestamp
+  updated_at timestamp
+}
+Ref: exercises.id < workout_day_items.exercise_id
+
+Table workout_sessions {
+    id integer [primary key]
+    workout_plan_id integer [not null]
+    user_id integer [not null]
+    status varchar [default: 'running'] // running | paused | completed | cancelled
+    is_active boolean [default: true] // convenient for quick queries; keep status as source of truth
+    duration_seconds integer [default: 0] // in seconds
+    started_at timestamp
+    ended_at timestamp
+    created_at timestamp
+    updated_at timestamp
+}
+Ref: workout_plans.id < workout_sessions.workout_plan_id
+Ref: users.id < workout_sessions.user_id
+// Ensure only one active session per user. Create a unique index on user id for active true to protect against race conditions
+// CREATE UNIQUE INDEX one_active_session_per_user
+//   ON workout_sessions(user_id)
+//   WHERE active = true;
+// might need something like this in rails migration
+// class AddUniqueActiveSessionIndex < ActiveRecord::Migration[6.1]
+//   def change
+//     add_index :workout_sessions,
+//               :user_id,
+//               unique: true,
+//               name: "one_active_session_per_user",
+//               where: "active = true"
+//   end
+// end
+
+
+Table workout_session_items {
+    id integer [primary key]
+    workout_session_id integer
+    exercise_id integer [not null]
+    workout_day_item_id integer [null] // link back to plan item if this came from the plan
+    is_extra boolean [default: false]
+    order integer
+    superset_group integer [null]   // session-scoped superset instance id
+    superset_order integer [null] // order within the superset
+    set_number integer
+    reps integer
+    weight float
+    duration_seconds integer // in seconds
+    rpe integer // rate of perceived exertion 1-5
+    created_at timestamp
+    updated_at timestamp
+}
+Ref: workout_sessions.id < workout_session_items.workout_session_id
+Ref: exercises.id < workout_session_items.exercise_id
+Ref: workout_day_items.id < workout_session_items.workout_day_item_id
