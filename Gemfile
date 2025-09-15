@@ -64,6 +64,8 @@ group :development do
   gem "web-console"
   # live-reloading https://github.com/hotwired/spark
   gem "hotwire-spark"
+
+  gem "letter_opener", "~> 1.10"
 end
 
 group :test do
