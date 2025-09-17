@@ -51,6 +51,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "factory_bot_rails", "~> 6.5"
+
+  gem "rspec-rails", "~> 8.0.0"
+
+  gem "faker", "~> 3.5"
 end
 
 group :development do
@@ -58,6 +64,8 @@ group :development do
   gem "web-console"
   # live-reloading https://github.com/hotwired/spark
   gem "hotwire-spark"
+
+  gem "letter_opener", "~> 1.10"
 end
 
 group :test do
