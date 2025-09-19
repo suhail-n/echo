@@ -14,7 +14,6 @@ RSpec.describe "workout_plans/new", type: :view do
     render
 
     assert_select "form[action=?][method=?]", workout_plans_path, "post" do
-
       assert_select "input[name=?]", "workout_plan[name]"
 
       assert_select "input[name=?]", "workout_plan[user_id]"
