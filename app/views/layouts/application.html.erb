@@ -19,9 +19,13 @@
   </head>
   <body>
     <%= render "layouts/navbar" %>
-    <main class="container mx-auto mt-28 px-5 flex">
+    <!--
+      Use smaller top margin on small screens and larger margin from md up.
+      Add bottom padding on small screens so the fixed `.dock` doesn't cover content.
+    -->
+    <main class="container mx-auto mt-6 md:mt-28 px-5 flex pb-16 md:pb-0">
       <% if notice %>
-        <div class="toast toast-end z-50">
+        <div class="toast toast-top toast-end z-50">
           <div class="alert alert-success">
             <div>
               <span><%= notice %></span>
@@ -36,7 +40,7 @@
         </script>
       <% end %>
       <% if alert %>
-        <div class="toast toast-end z-50">
+        <div class="toast toast-top toast-end z-50">
           <div class="alert alert-error">
             <div>
               <span><%= alert %></span>
