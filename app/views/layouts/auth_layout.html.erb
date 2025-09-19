@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="light">
+<html>
   <head>
     <title><%= content_for(:title) || "Echo" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -21,9 +21,7 @@
     <main class="bg-base-200 min-h-screen">
       <div class="navbar bg-base-100 shadow-lg lg:px-32">
         <div class="navbar-start">
-          <%= link_to root_path, class: "btn btn-ghost text-xl" do %>
-            Echo
-          <% end %>
+          <%= link_to "Echo", root_path, data: { turbo: false }, class: "btn btn-ghost text-xl" %>
         </div>
         <div class="navbar-center">
           <!-- Empty center section -->

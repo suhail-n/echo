@@ -1,0 +1,31 @@
+<%= form_with(model: workout_plan, class: "contents") do |form| %>
+  <% if workout_plan.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-md mt-3">
+      <h2><%= pluralize(workout_plan.errors.count, "error") %> prohibited this workout_plan from being saved:</h2>
+      <ul class="list-disc ml-6">
+        <% workout_plan.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="my-5">
+    <%= form.label :name %>
+    <%= form.text_field :name, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:name].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:name].any?}] %>
+  </div>
+  <div class="my-5">
+    <%= form.label :user_id %>
+    <%= form.text_field :user_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:user_id].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:user_id].any?}] %>
+  </div>
+  <div class="my-5 flex items-center gap-2">
+    <%= form.label :is_template %>
+    <%= form.checkbox :is_template, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:is_template].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:is_template].any?}] %>
+  </div>
+  <div class="my-5 flex items-center gap-2">
+    <%= form.label :is_published %>
+    <%= form.checkbox :is_published, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:is_published].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:is_published].any?}] %>
+  </div>
+  <div class="inline">
+    <%= form.submit class: "btn btn-primary w-full sm:w-auto" %>
+  </div>
+<% end %>

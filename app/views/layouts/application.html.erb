@@ -18,9 +18,38 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+    <%= render "layouts/navbar" %>
     <main class="container mx-auto mt-28 px-5 flex">
+      <% if notice %>
+        <div class="toast toast-end z-50">
+          <div class="alert alert-success">
+            <div>
+              <span><%= notice %></span>
+              <button onclick="this.parentElement.parentElement.remove()" class="btn btn-ghost btn-xs">✕</button>
+            </div>
+          </div>
+        </div>
+        <script>
+          setTimeout(() => {
+                  document.querySelector('.toast')?.remove();
+          }, 5000);
+        </script>
+      <% end %>
+      <% if alert %>
+        <div class="toast toast-end z-50">
+          <div class="alert alert-error">
+            <div>
+              <span><%= alert %></span>
+              <button onclick="this.parentElement.parentElement.remove()" class="btn btn-ghost btn-xs">✕</button>
+            </div>
+          </div>
+        </div>
+        <script>
+          setTimeout(() => {
+                  document.querySelector('.toast')?.remove();
+          }, 5000);
+        </script>
+      <% end %>
       <%= yield %>
     </main>
   </body>

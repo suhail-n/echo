@@ -8,10 +8,19 @@ class ApplicationController < ActionController::Base
     if controller_name == "landing"
       "landing"
     elsif devise_controller?
-      # return "auth" if new_user_session GET    /users/sign_in(.:format) devise/sessions#new,  new_user_registration GET    /users/sign_up(.:format) devise/registrations#new, passwords#new, confirmations#new
-      "auth_layout" if (controller_name == "sessions" && action_name == "new") || (controller_name == "registrations" && action_name == "new") || (controller_name == "passwords" && action_name == "new") || (controller_name == "confirmations" && action_name == "new")
+      "auth_layout"
     else
       "application"
     end
+  end
+
+  # Devise: redirect users to workout plans after sign in/out
+  def after_sign_in_path_for(resource)
+    workout_plans_path
+  end
+
+  def after_sign_out_path_for(resource_or_scope)
+    # signin page
+    new_user_session_path
   end
 end
