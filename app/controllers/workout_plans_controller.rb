@@ -3,7 +3,7 @@ class WorkoutPlansController < ApplicationController
   before_action :set_workout_plan, only: %i[ show edit update destroy ]
   # GET /workout_plans or /workout_plans.json
   def index
-    @workout_plans = WorkoutPlan.all
+    @workout_plans = current_user.workout_plans.order(:created_at)
   end
 
   # GET /workout_plans/1 or /workout_plans/1.json
@@ -21,7 +21,7 @@ class WorkoutPlansController < ApplicationController
 
   # POST /workout_plans or /workout_plans.json
   def create
-    @workout_plan = WorkoutPlan.new(workout_plan_params)
+    @workout_plan = current_user.workout_plans.build(workout_plan_params)
 
     respond_to do |format|
       if @workout_plan.save
@@ -60,11 +60,11 @@ class WorkoutPlansController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_workout_plan
-      @workout_plan = WorkoutPlan.find(params.expect(:id))
+      @workout_plan = current_user.workout_plans.find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.
     def workout_plan_params
-      params.expect(workout_plan: [ :name, :user_id, :is_template, :is_published ])
+      params.expect(workout_plan: [ :name, :is_template, :is_published ])
     end
 end
