@@ -28,13 +28,15 @@ Table muscles {
   id integer [primary key]
   name varchar 
 }
-Ref: muscles.id < muscles_worked.muscles_id
+Ref: muscles.id < exercise_muscles.muscle_id
 
-Table muscles_worked {
+Table exercise_muscles {
   id integer [primary key]
   exercise_id integer [not null]
-  muscles_id integer [not null]
-  type varchar [not null] // primary or secondary
+  muscle_id integer [not null]
+  role varchar [not null] // primary or secondary
+  created_at timestamp
+  updated_at timestamp
 }
 
 Table workout_plans {
