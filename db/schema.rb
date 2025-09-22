@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_22_031829) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_22_034554) do
   create_table "exercise_muscles", force: :cascade do |t|
     t.integer "exercise_id", null: false
     t.integer "muscle_id", null: false
@@ -53,6 +53,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_031829) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "workout_day_items", force: :cascade do |t|
+    t.integer "workout_day_id", null: false
+    t.integer "exercise_id", null: false
+    t.integer "order"
+    t.integer "superset_group"
+    t.integer "planned_sets"
+    t.integer "planned_reps"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id"], name: "index_workout_day_items_on_exercise_id"
+    t.index ["workout_day_id"], name: "index_workout_day_items_on_workout_day_id"
+  end
+
+  create_table "workout_days", force: :cascade do |t|
+    t.integer "workout_plan_id", null: false
+    t.string "name"
+    t.integer "order"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["workout_plan_id"], name: "index_workout_days_on_workout_plan_id"
+  end
+
   create_table "workout_plans", force: :cascade do |t|
     t.string "name"
     t.integer "user_id", null: false
@@ -65,5 +87,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_22_031829) do
 
   add_foreign_key "exercise_muscles", "exercises"
   add_foreign_key "exercise_muscles", "muscles"
+  add_foreign_key "workout_day_items", "exercises"
+  add_foreign_key "workout_day_items", "workout_days"
+  add_foreign_key "workout_days", "workout_plans"
   add_foreign_key "workout_plans", "users"
 end
