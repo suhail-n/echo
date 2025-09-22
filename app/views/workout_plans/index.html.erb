@@ -115,9 +115,9 @@
       <div class="badge badge-secondary"><%= @workout_plans.count %></div>
     </h2>
     <% if @workout_plans.any? %>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      <div id="workout_plans" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
         <% @workout_plans.each do |workout_plan| %>
-          <div class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow">
+          <div id="workout_plan_<%= workout_plan.id %>" class="card bg-base-200 shadow-md hover:shadow-lg transition-shadow">
             <div class="card-body p-4">
               <div class="flex items-start justify-between">
                 <div class="flex-1">

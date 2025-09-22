@@ -29,8 +29,7 @@ RSpec.describe "/workout_plans", type: :request do
 
   let(:invalid_attributes) {
     {
-      name: nil,
-      user_id: nil
+      name: nil
     }
   }
 

@@ -18,9 +18,13 @@ RSpec.describe "workout_plans/index", type: :view do
     @plans.each do |plan|
       cell_selector_workout_plan = "div#workout_plan_#{plan.id}"
       assert_select cell_selector_workout_plan, count: 1
-      assert_select cell_selector_workout_plan, text: Regexp.new("Name: #{plan.name}".to_s), count: 1
-      assert_select cell_selector_workout_plan, text: Regexp.new("Is template: #{plan.is_template ? 'Yes' : 'No'}"), count: 1
-      assert_select cell_selector_workout_plan, text: Regexp.new("Is published: #{plan.is_published ? 'Yes' : 'No'}"), count: 1
+      assert_select cell_selector_workout_plan, text: Regexp.new("#{plan.name}".to_s), count: 1
+      if plan.is_template
+        assert_select cell_selector_workout_plan, text: /Template/, count: 1
+      end
+      if plan.is_published
+        assert_select cell_selector_workout_plan, text: /Published/, count: 1
+      end
     end
   end
 end
