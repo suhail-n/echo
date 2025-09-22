@@ -17,14 +17,16 @@
     <%= form.label :user_id %>
     <%= form.text_field :user_id, class: ["block shadow-sm rounded-md border px-3 py-2 mt-2 w-full", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:user_id].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:user_id].any?}] %>
   </div>
-  <div class="my-5 flex items-center gap-2">
-    <%= form.label :is_template %>
-    <%= form.checkbox :is_template, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:is_template].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:is_template].any?}] %>
-  </div>
-  <div class="my-5 flex items-center gap-2">
-    <%= form.label :is_published %>
-    <%= form.checkbox :is_published, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:is_published].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:is_published].any?}] %>
-  </div>
+  <% if current_user&.is_admin? %>
+    <div class="my-5 flex items-center gap-2">
+      <%= form.label :is_template %>
+      <%= form.checkbox :is_template, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:is_template].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:is_template].any?}] %>
+    </div>
+    <div class="my-5 flex items-center gap-2">
+      <%= form.label :is_published %>
+      <%= form.checkbox :is_published, class: ["block shadow-sm rounded-md border order-first h-5 w-5", {"border-gray-400 focus:outline-blue-600": workout_plan.errors[:is_published].none?, "border-red-400 focus:outline-red-600": workout_plan.errors[:is_published].any?}] %>
+    </div>
+  <% end %>
   <div class="inline">
     <%= form.submit class: "btn btn-primary w-full sm:w-auto" %>
   </div>
