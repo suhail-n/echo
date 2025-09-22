@@ -10,7 +10,32 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_17_012746) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_20_121706) do
+  create_table "exercise_muscles", force: :cascade do |t|
+    t.integer "exercise_id", null: false
+    t.integer "muscle_id", null: false
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exercise_id", "muscle_id", "role"], name: "index_exercise_muscles_on_exercise_id_and_muscle_id_and_role", unique: true
+    t.index ["exercise_id"], name: "index_exercise_muscles_on_exercise_id"
+    t.index ["muscle_id"], name: "index_exercise_muscles_on_muscle_id"
+  end
+
+  create_table "exercises", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_exercises_on_name"
+  end
+
+  create_table "muscles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_muscles_on_name"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -37,5 +62,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_17_012746) do
     t.index ["user_id"], name: "index_workout_plans_on_user_id"
   end
 
+  add_foreign_key "exercise_muscles", "exercises"
+  add_foreign_key "exercise_muscles", "muscles"
   add_foreign_key "workout_plans", "users"
 end

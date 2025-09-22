@@ -75,3 +75,4 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
+gem "csv" # add this line so Ruby 3.4's csv gem is available under Bundler
