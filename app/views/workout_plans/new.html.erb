@@ -1,6 +1,6 @@
 <% content_for :title, "New workout plan" %>
-<div class="md:w-2/3 w-full">
+<div class="md:w-2/3 w-full mx-auto">
   <h1 class="font-bold text-4xl">New workout plan</h1>
-  <%= render "form", workout_plan: @workout_plan %>
+  <%= render "form2", workout_plan: @workout_plan %>
   <%= link_to "Back to workout plans", workout_plans_path, class: "btn btn-neutral w-full sm:w-auto" %>
 </div>

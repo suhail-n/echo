@@ -1,0 +1,176 @@
+<div data-controller="exercise-modal">
+<%= form_with(model: workout_plan, class: "space-y-6") do |form| %>
+  <!-- Error Messages -->
+  <% if workout_plan.errors.any? %>
+    <div class="alert alert-error">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <div>
+        <h3 class="font-bold"><%= pluralize(workout_plan.errors.count, "error") %> prohibited this workout plan from being saved:</h3>
+        <ul class="list-disc list-inside">
+          <% workout_plan.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Workout Plan Name -->
+  <div class="form-control w-full">
+    <%= form.label :name, class: "label" do %>
+      <span class="label-text text-base font-medium">Workout Plan Name <span class="text-error">*</span></span>
+    <% end %>
+    <%= form.text_field :name, 
+        placeholder: "Enter workout plan name", 
+        required: true,
+        class: "input input-bordered w-full #{'input-error' if workout_plan.errors[:name].any?}" %>
+    <% if workout_plan.errors[:name].any? %>
+      <div class="label">
+        <span class="label-text-alt text-error"><%= workout_plan.errors[:name].first %></span>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Hidden User ID -->
+  <%= form.hidden_field :user_id, value: current_user&.id %>
+
+  <!-- Admin Controls -->
+  <% if current_user&.is_admin? %>
+    <div class="card bg-base-200">
+      <div class="card-body">
+        <h3 class="card-title text-lg">Admin Options</h3>
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <span class="label-text">Make this a template</span>
+            <%= form.check_box :is_template, class: "toggle toggle-primary" %>
+          </label>
+        </div>
+        <div class="form-control">
+          <label class="label cursor-pointer">
+            <span class="label-text">Publish for everyone</span>
+            <%= form.check_box :is_published, class: "toggle toggle-primary" %>
+          </label>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!-- Workout Days Section -->
+  <div class="card bg-base-100 shadow-xl" 
+       data-controller="workout-plan-builder"
+       data-workout-plan-builder-day-counter-value="0">
+    <div class="card-body">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="card-title text-xl">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Workout Days
+        </h3>
+        <button type="button" 
+                class="btn btn-primary btn-sm"
+                <%# editing this one %>
+                data-action="click->workout-plan-builder#addDay">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Add Day
+        </button>
+      </div>
+
+      <div data-workout-plan-builder-target="daysContainer" class="space-y-4">
+        <!-- Workout days will be added here dynamically -->
+      </div>
+
+      <div data-workout-plan-builder-target="emptyDaysMessage" 
+           class="text-center py-8 text-base-content/60">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <p>No workout days added yet</p>
+        <p class="text-sm">Click "Add Day" to create your first workout day</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Submit Button -->
+  <div class="card-actions justify-end">
+    <%= form.submit "Create Workout Plan", class: "btn btn-primary btn-lg w-full sm:w-auto" %>
+  </div>
+<% end %>
+
+<!-- Exercise Search Modal -->
+<dialog data-exercise-modal-target="modal" class="modal">
+  <div class="modal-box w-11/12 max-w-2xl">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+              data-action="click->exercise-modal#close">✕</button>
+    </form>
+    <h3 class="font-bold text-lg mb-4">Add Exercises</h3>
+    
+    <!-- Search Bar -->
+    <div class="form-control mb-4">
+      <%= form_with url: search_exercises_path, method: :get, 
+                    data: { 
+                      turbo_frame: "exercise-search-results",
+                      controller: "debounced-search"
+                    } do |search_form| %>
+        <div class="join w-full">
+          <%= search_form.text_field :q, 
+                                   placeholder: "Search exercises...", 
+                                   class: "input input-bordered join-item flex-1",
+                                   data: { 
+                                     action: "input->debounced-search#search",
+                                     debounced_search_target: "input" 
+                                   } %>
+          <button type="submit" class="btn join-item">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Exercise List -->
+    <%= turbo_frame_tag "exercise-search-results", id: "exercise-search-results" do %>
+      <div class="max-h-96 overflow-y-auto space-y-2">
+        <%= render "exercises/exercise_list", exercises: @exercises || [] %>
+      </div>
+    <% end %>
+
+    <div class="modal-action">
+      <button type="button" 
+              data-exercise-modal-target="addSelectedButton"
+              data-action="click->exercise-modal#addSelected"
+              class="btn btn-primary">Add Selected</button>
+      <form method="dialog">
+        <button class="btn" data-action="click->exercise-modal#close">Cancel</button>
+      </form>
+    </div>
+  </div>
+</dialog>
+
+<style>
+.superset-active {
+  @apply border-l-4 border-accent;
+}
+
+.drag-handle, .exercise-drag-handle {
+  cursor: grab;
+}
+
+.drag-handle:active, .exercise-drag-handle:active {
+  cursor: grabbing;
+}
+
+@media (max-width: 768px) {
+  .modal-box {
+    @apply w-full max-w-none h-full max-h-none rounded-none;
+  }
+}
+</style>
+
+</div>

@@ -15,6 +15,15 @@ class WorkoutPlansController < ApplicationController
     @workout_plan = WorkoutPlan.new
   end
 
+  def add_workout_day
+    @workout_day = @workout_plan.workout_days.new
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: turbo_stream.append("workout_days", partial: "workout_days/form", locals: { workout_day: @workout_day })
+      end
+    end
+  end
+
   # GET /workout_plans/1/edit
   def edit
   end
