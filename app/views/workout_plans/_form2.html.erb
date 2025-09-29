@@ -53,7 +53,7 @@
     </div>
   <% end %>
   <!-- Workout Days Section -->
-  <div class="card bg-base-100 shadow-xl">
+  <div class="card bg-base-100 shadow-xl" data-controller="workout-days">
     <div class="card-body">
       <div class="flex justify-between items-center mb-4">
         <h3 class="card-title text-xl">
@@ -63,18 +63,26 @@
           Workout Days
         </h3>
         <button type="button" 
-                class="btn btn-primary btn-sm">
+                class="btn btn-primary btn-sm"
+                data-action="click->workout-days#add">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
           Add Day
         </button>
-        <%= button_to "Add Day", add_workout_day_workout_plan_path(@workout_plan), method: :post, form: { data: { turbo_stream: true } }, class: "btn btn-primary btn-sm" %>
       </div>
-      <div id="workout_days" class="space-y-4">
-        <!-- Workout days will be added here dynamically -->
+      <div data-workout-days-target="container" class="space-y-4">
+        <%= form.fields_for :workout_days do |day_form| %>
+          <%= render 'workout_days/workout_days_fields', f: day_form %>
+        <% end %>
       </div>
-      <div class="text-center py-8 text-base-content/60">
+      <!-- Template for new workout days -->
+      <template data-workout-days-target="template">
+        <%= form.fields_for :workout_days, WorkoutDay.new, child_index: 'NEW_RECORD' do |day_form| %>
+          <%= render 'workout_days/workout_days_fields', f: day_form %>
+        <% end %>
+      </template>
+      <div class="text-center py-8 text-base-content/60" data-workout-days-target="emptyState">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
         </svg>

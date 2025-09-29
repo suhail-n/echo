@@ -74,6 +74,24 @@ class WorkoutPlansController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def workout_plan_params
-      params.expect(workout_plan: [ :name, :is_template, :is_published ])
+      params.require(:workout_plan).permit(
+        :name,
+        :is_template,
+        :is_published,
+        workout_days_attributes: [
+          :id,
+          :name,
+          :order,
+          :_destroy,
+          workout_day_items_attributes: [
+            :id,
+            :exercise_id,
+            :planned_sets,
+            :planned_reps,
+            :order,
+            :_destroy
+          ]
+        ]
+      )
     end
 end
