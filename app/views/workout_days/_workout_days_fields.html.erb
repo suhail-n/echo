@@ -34,7 +34,7 @@
         Add Exercise
       </button>
     </div>
-    <div data-workout-day-nested-form-target="links" class="space-y-2">
+    <div data-workout-day-nested-form-target="links" class="space-y-4">
       <%= f.fields_for :workout_day_items do |item_form| %>
         <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
       <% end %>

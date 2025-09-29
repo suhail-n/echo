@@ -1,34 +1,119 @@
-<div class="workout-exercise-item" data-new-record="<%= form.object.new_record? %>">
-  <div class="flex items-center space-x-2 mb-2">
-    <div class="w-full relative" data-controller="exercise-search">
-      <%= form.hidden_field :exercise_id %>
-      <input type="text" 
-             placeholder="Search for exercise..." 
-             class="input input-bordered w-full"
-             data-exercise-search-target="input"
-             data-action="input->exercise-search#search focus->exercise-search#showDropdown">
-      <div class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto hidden"
-           data-exercise-search-target="dropdown">
+<div class="workout-exercise-item card bg-base-100 border border-base-300 p-4" data-new-record="<%= form.object.new_record? %>" data-controller="exercise-selection">
+  <!-- Hidden fields -->
+  <%= form.hidden_field :exercise_id %>
+  <%= form.hidden_field :_destroy %>
+  <%= form.hidden_field :order %>
+  
+  <!-- Exercise Selection Card -->
+  <div class="space-y-3">
+    <!-- Exercise Display/Selection -->
+    <div data-exercise-selection-target="selectedExercise" class="<%= 'hidden' if form.object.exercise_id.blank? %>">
+      <div class="flex items-center justify-between">
+        <div>
+          <h4 class="font-semibold text-base-content" data-exercise-selection-target="exerciseName">
+            <%= form.object.exercise&.name %>
+          </h4>
+          <p class="text-sm text-base-content/60" data-exercise-selection-target="exerciseMuscles">
+            <%= form.object.exercise&.muscles&.map(&:name)&.join(', ') %>
+          </p>
+        </div>
+        <button type="button" 
+                class="btn btn-ghost btn-sm"
+                data-action="click->exercise-selection#openModal">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div data-exercise-selection-target="emptyState" class="<%= 'hidden' unless form.object.exercise_id.blank? %>">
+      <button type="button" 
+              class="btn btn-outline btn-block"
+              data-action="click->exercise-selection#openModal">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Select Exercise
+      </button>
+    </div>
+    
+    <!-- Sets and Reps -->
+    <div class="flex gap-3">
+      <div class="flex-1">
+        <label class="label">
+          <span class="label-text">Sets</span>
+        </label>
+        <%= form.number_field :planned_sets, 
+            value: form.object.planned_sets || 3, 
+            class: "input input-bordered w-full", 
+            placeholder: "3", 
+            min: 1, max: 50 %>
+      </div>
+      <div class="flex-1">
+        <label class="label">
+          <span class="label-text">Reps</span>
+        </label>
+        <%= form.number_field :planned_reps, 
+            value: form.object.planned_reps || 10, 
+            class: "input input-bordered w-full", 
+            placeholder: "10", 
+            min: 1, max: 200 %>
+      </div>
+      <div class="flex items-end">
+        <button type="button" 
+                data-action="workout-day-nested-form#remove" 
+                class="btn btn-error btn-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Exercise Selection Modal -->
+  <dialog data-exercise-selection-target="modal" class="modal">
+    <div class="modal-box w-11/12 max-w-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-lg">Select Exercise</h3>
+        <button type="button" 
+                class="btn btn-sm btn-circle btn-ghost"
+                data-action="click->exercise-selection#closeModal">✕</button>
+      </div>
+      
+      <!-- Search Input -->
+      <div class="mb-4">
+        <input type="text" 
+               placeholder="Search exercises..." 
+               class="input input-bordered w-full"
+               data-exercise-selection-target="searchInput"
+               data-action="input->exercise-selection#search">
+      </div>
+      
+      <!-- Exercise List -->
+      <div class="max-h-96 overflow-y-auto space-y-2" data-exercise-selection-target="exerciseList">
         <% Exercise.includes(:muscles).each do |exercise| %>
-          <div class="p-3 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
-               data-exercise-search-target="option"
+          <div class="card bg-base-200 hover:bg-base-300 cursor-pointer transition-colors"
+               data-exercise-selection-target="exerciseOption"
                data-exercise-id="<%= exercise.id %>"
                data-exercise-name="<%= exercise.name %>"
-               data-action="click->exercise-search#selectExercise">
-            <div class="font-medium text-gray-900"><%= exercise.name %></div>
-            <div class="text-sm text-gray-600"><%= exercise.muscles.map(&:name).join(', ') %></div>
+               data-exercise-muscles="<%= exercise.muscles.map(&:name).join(', ') %>"
+               data-search-text="<%= "#{exercise.name} #{exercise.muscles.map(&:name).join(' ')}" %>"
+               data-action="click->exercise-selection#selectExercise">
+            <div class="card-body p-4">
+              <h4 class="card-title text-base"><%= exercise.name %></h4>
+              <div class="flex flex-wrap gap-1 mt-2">
+                <% exercise.muscles.each do |muscle| %>
+                  <span class="badge badge-primary badge-sm"><%= muscle.name %></span>
+                <% end %>
+              </div>
+            </div>
           </div>
         <% end %>
       </div>
     </div>
-    <%= form.number_field :planned_sets, value: form.object.planned_sets || 3, class: "input input-bordered w-20", placeholder: "Sets", min: 1 %>
-    <%= form.number_field :planned_reps, value: form.object.planned_reps || 10, class: "input input-bordered w-20", placeholder: "Reps", min: 1 %>
-    <button type="button" data-action="workout-day-nested-form#remove" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
-      </svg>
-    </button>
-    <%= form.hidden_field :_destroy %>
-    <%= form.hidden_field :order %>
-  </div>
+    <div class="modal-backdrop" data-action="click->exercise-selection#closeModal"></div>
+  </dialog>
 </div>
