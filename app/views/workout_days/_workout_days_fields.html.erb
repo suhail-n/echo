@@ -1,4 +1,4 @@
-<div class="workout-day-wrapper card bg-base-200 shadow-md p-4 space-y-4" data-controller="nested-form">
+<div class="workout-day-wrapper card bg-base-200 shadow-md p-4 space-y-4" data-controller="workout-day-nested-form">
   <div class="flex justify-between items-center">
     <%= f.text_field :name, 
         placeholder: "Day Name (e.g., 'Push Day', 'Pull Day', 'Leg Day')", 
@@ -27,26 +27,26 @@
       </h5>
       <button type="button" 
               class="btn btn-secondary btn-sm"
-              data-action="click->nested-form#add">
+              data-action="click->workout-day-nested-form#add">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         Add Exercise
       </button>
     </div>
-    <div data-nested-form-target="links" class="space-y-2">
+    <div data-workout-day-nested-form-target="links" class="space-y-2">
       <%= f.fields_for :workout_day_items do |item_form| %>
-        <%= render 'workout_plans/workout_day_item_fields', form: item_form %>
+        <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
       <% end %>
     </div>
     <!-- Template for new exercises -->
-    <template data-nested-form-target="template">
+    <template data-workout-day-nested-form-target="template">
       <%= f.fields_for :workout_day_items, WorkoutDayItem.new, child_index: 'NEW_RECORD' do |item_form| %>
-        <%= render 'workout_plans/workout_day_item_fields', form: item_form %>
+        <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
       <% end %>
     </template>
     <!-- Empty state when no exercises -->
-    <div class="text-center py-8 text-base-content/60" data-nested-form-target="emptyState">
+    <div class="text-center py-8 text-base-content/60" data-workout-day-nested-form-target="emptyState">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.586V5L8 4z" />
       </svg>

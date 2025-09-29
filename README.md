@@ -55,3 +55,11 @@ Things you may want to cover:
 ## Entity Relationship Diagram (ERD)
 
 The database schema is defined in the `ERD.dbml` file. You can visualize it using a DBML viewer or convert it to SQL for your database.
+
+## To Do
+
+- [ ] Separate `nested_form_controller.js` into separate controller for workout day items
+- [ ] Add order field to workout day items to maintain order similar to the `workout_days_controller.js`
+- [ ] Add drag and drop functionality to reorder workout days and workout day items
+- [ ] add exercise search functionality when adding an exercise to a workout day item
+- [ ] Change the add exercises UI to make it more mobile and user friendly

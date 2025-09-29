@@ -2,13 +2,11 @@
   <div class="flex items-center space-x-2 mb-2">
     <div class="w-full relative" data-controller="exercise-search">
       <%= form.hidden_field :exercise_id %>
-      
       <input type="text" 
              placeholder="Search for exercise..." 
              class="input input-bordered w-full"
              data-exercise-search-target="input"
              data-action="input->exercise-search#search focus->exercise-search#showDropdown">
-             
       <div class="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-60 overflow-y-auto hidden"
            data-exercise-search-target="dropdown">
         <% Exercise.includes(:muscles).each do |exercise| %>
@@ -23,16 +21,13 @@
         <% end %>
       </div>
     </div>
-    
     <%= form.number_field :planned_sets, value: form.object.planned_sets || 3, class: "input input-bordered w-20", placeholder: "Sets", min: 1 %>
     <%= form.number_field :planned_reps, value: form.object.planned_reps || 10, class: "input input-bordered w-20", placeholder: "Reps", min: 1 %>
-    
-    <button type="button" data-action="nested-form#remove" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white">
+    <button type="button" data-action="workout-day-nested-form#remove" class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
       </svg>
     </button>
-    
     <%= form.hidden_field :_destroy %>
     <%= form.hidden_field :order %>
   </div>
