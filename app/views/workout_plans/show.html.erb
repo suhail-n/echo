@@ -1,8 +1,145 @@
-<% content_for :title, "Showing workout plan" %>
-<div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Showing workout plan</h1>
-  <%= render @workout_plan %>
-  <%= link_to "Edit this workout plan", edit_workout_plan_path(@workout_plan), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to workout plans", workout_plans_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= button_to "Destroy this workout plan", @workout_plan, method: :delete, form_class: "sm:inline-block mt-2 sm:mt-0 sm:ml-2", class: "w-full rounded-md px-3.5 py-2.5 text-white bg-red-600 hover:bg-red-500 font-medium cursor-pointer", data: { turbo_confirm: "Are you sure?" } %>
+<% content_for :title, @workout_plan.name %>
+<div class="md:w-2/3 w-full mx-auto p-2 md:p-4">
+  <!-- Header Section -->
+  <div class="mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+      <div>
+        <h1 class="text-3xl font-bold text-base-content"><%= @workout_plan.name %></h1>
+        <div class="flex gap-2 mt-2">
+          <% if @workout_plan.is_template? %>
+            <span class="badge badge-primary">Template</span>
+          <% end %>
+          <% if @workout_plan.is_published? %>
+            <span class="badge badge-success">Published</span>
+          <% end %>
+        </div>
+      </div>
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <!-- Primary Action - Always Visible -->
+        <%= button_to "Activate Workout", activate_workout_plan_path(@workout_plan), 
+            method: :post,
+            class: "btn btn-primary btn-sm sm:btn-md", 
+            data: { turbo_confirm: "Start this workout session?" } %>
+        <!-- Desktop: Horizontal Layout -->
+        <div class="hidden sm:flex gap-2">
+          <%= link_to "Edit Plan", edit_workout_plan_path(@workout_plan), 
+              class: "btn btn-outline btn-sm sm:btn-md" %>
+          <%= button_to "Delete Plan", @workout_plan, 
+              method: :delete, 
+              class: "btn btn-error btn-outline btn-sm sm:btn-md", 
+              data: { turbo_confirm: "Are you sure? This will permanently delete this workout plan." } %>
+        </div>
+        <!-- Mobile: Icon Buttons -->
+        <div class="flex ml-auto gap-1 sm:hidden">
+          <!-- Edit Button -->
+          <%= link_to edit_workout_plan_path(@workout_plan), 
+              class: "btn btn-ghost btn-sm btn-square tooltip tooltip-bottom",
+              data: { tip: "Edit Plan" } do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          <% end %>
+          <!-- Delete Button -->
+          <%= button_to @workout_plan, 
+              method: :delete, 
+              class: "btn btn-ghost btn-sm btn-square text-error hover:bg-error hover:text-error-content tooltip tooltip-bottom",
+              data: { 
+                turbo_confirm: "Are you sure? This will permanently delete this workout plan.",
+                tip: "Delete Plan"
+              } do %>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <!-- Back Link -->
+    <%= link_to workout_plans_path, class: "link link-hover" do %>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      </svg>
+      Back to Workout Plans
+    <% end %>
+  </div>
+  <!-- Workout Days Section -->
+  <div class="space-y-4">
+    <% if @workout_plan.workout_days.any? %>
+      <% @workout_plan.workout_days.includes(workout_day_items: { exercise: :muscles }).each_with_index do |workout_day, day_index| %>
+        <div class="collapse collapse-arrow bg-base-100 shadow-md">
+          <input type="checkbox" name="workout-day-<%= workout_day.id %>" <%= "checked" if day_index == 0 %> />
+          <div class="collapse-title">
+            <div class="flex items-center justify-between pr-4">
+              <div class="flex items-center gap-3">
+                <h2 class="text-lg md:text-xl font-bold"><%= workout_day.name %></h2>
+              </div>
+              <div class="text-sm text-base-content/60">
+                <%= pluralize(workout_day.workout_day_items.count, 'exercise') %>
+              </div>
+            </div>
+          </div>
+          <div class="collapse-content">
+            <div class="pt-2">
+              <!-- Exercises -->
+              <% if workout_day.workout_day_items.any? %>
+                <div class="space-y-3">
+                  <% workout_day.workout_day_items.includes(exercise: :muscles).each_with_index do |item, index| %>
+                    <div class="card bg-base-200 border border-base-300">
+                      <div class="card-body p-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                          <!-- Exercise Info -->
+                          <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-2">
+                              <span class="badge badge-ghost badge-sm"><%= index + 1 %></span>
+                              <h3 class="font-semibold text-base-content"><%= item.exercise.name %></h3>
+                            </div>
+                            <div class="flex flex-wrap gap-1">
+                              <% item.exercise.muscles.each do |muscle| %>
+                                <span class="badge badge-primary badge-xs"><%= muscle.name %></span>
+                              <% end %>
+                            </div>
+                          </div>
+                          <!-- Sets & Reps -->
+                          <div class="flex gap-4 text-sm">
+                            <div class="text-center">
+                              <div class="font-semibold text-lg text-primary"><%= item.planned_sets %></div>
+                              <div class="text-base-content/60">Sets</div>
+                            </div>
+                            <div class="text-center">
+                              <div class="font-semibold text-lg text-secondary"><%= item.planned_reps %></div>
+                              <div class="text-base-content/60">Reps</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="text-center py-8 text-base-content/60">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.586V5L8 4z" />
+                  </svg>
+                  <p>No exercises in this day</p>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <!-- Empty State -->
+      <div class="card bg-base-100 shadow-md">
+        <div class="card-body text-center py-12">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+          <h3 class="text-lg font-semibold mb-2">No Workout Days</h3>
+          <p class="text-base-content/60 mb-4">This workout plan doesn't have any workout days yet.</p>
+          <%= link_to "Edit Plan", edit_workout_plan_path(@workout_plan), class: "btn btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

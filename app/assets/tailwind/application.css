@@ -20,3 +20,8 @@
         @slot;
     }
 }
+
+/* Details/Summary Chevron Animation */
+details[open] .details-chevron {
+    transform: rotate(90deg);
+}

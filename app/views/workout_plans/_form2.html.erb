@@ -96,6 +96,7 @@
   </div>
   <!-- Submit Button -->
   <div class="card-actions justify-end">
-    <%= form.submit "Create Workout Plan", class: "btn btn-primary btn-lg w-full sm:w-auto" %>
+    <%= form.submit workout_plan.new_record? ? "Create Workout Plan" : "Update Workout Plan", 
+        class: "btn btn-primary btn-lg w-full sm:w-auto" %>
   </div>
 <% end %>

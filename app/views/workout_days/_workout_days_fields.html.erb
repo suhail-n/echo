@@ -1,57 +1,70 @@
-<div class="workout-day-wrapper card bg-base-200 shadow-md p-4 space-y-4" data-new-record="<%= f.object.new_record? %>" data-controller="workout-day-nested-form">
-  <div class="flex justify-between items-center">
-    <%= f.text_field :name, 
-        placeholder: "Day Name (e.g., 'Push Day', 'Pull Day', 'Leg Day')", 
-        class: "input input-bordered flex-1 mr-2",
-        required: true %>
-    <button type="button" 
-            class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white"
-            data-action="click->workout-days#remove">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
-      </svg>
-      Remove Day
-    </button>
-  </div>
-  <!-- Hidden fields for Rails nested attributes -->
-  <%= f.hidden_field :_destroy %>
-  <%= f.hidden_field :order %>
-  <!-- Exercise Items Section -->
-  <div class="space-y-3">
-    <div class="flex items-center justify-between">
-      <h5 class="text-sm card-title font-semibold">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.586V5L8 4z" />
-        </svg>
-        Exercises
-      </h5>
+<div class="workout-day-wrapper card bg-base-200 shadow-md" data-new-record="<%= f.object.new_record? %>" data-controller="workout-day-nested-form">
+  <!-- Day Header - Always Visible -->
+  <div class="card-body p-4 pb-2">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3 flex-1">
+        <%= f.text_field :name, 
+            placeholder: "Day Name (e.g., 'Push Day', 'Pull Day', 'Leg Day')", 
+            class: "input input-bordered input-sm flex-1 max-w-xs",
+            required: true %>
+      </div>
       <button type="button" 
-              class="btn btn-secondary btn-sm"
+              class="btn btn-ghost btn-sm text-error hover:bg-error hover:text-white"
+              data-action="click->workout-days#remove">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+        Remove Day
+      </button>
+    </div>
+    <!-- Hidden fields for Rails nested attributes -->
+    <%= f.hidden_field :_destroy %>
+    <%= f.hidden_field :order %>
+  </div>
+  <!-- Collapsible Exercises Section using HTML details/summary -->
+  <details class="px-4 pb-4" open>
+    <summary class="cursor-pointer py-2 flex items-center justify-between hover:bg-base-300/50 rounded px-2 -mx-2 list-none">
+      <div class="flex items-center">
+        <!-- Collapse/Expand Chevron -->
+        <svg class="h-4 w-4 mr-2 transform transition-transform duration-200 details-chevron text-base-content/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+        <h5 class="text-sm font-semibold flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.586V5L8 4z" />
+          </svg>
+          Exercises
+        </h5>
+      </div>
+      <button type="button" 
+              class="btn btn-primary btn-sm"
               data-action="click->workout-day-nested-form#add">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
         Add Exercise
       </button>
+    </summary>
+    <div class="pt-3 space-y-4">
+      <div data-workout-day-nested-form-target="workoutDayItems" class="space-y-4">
+        <%= f.fields_for :workout_day_items do |item_form| %>
+          <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
+        <% end %>
+      </div>
+      <!-- Template for new exercises -->
+      <template data-workout-day-nested-form-target="template">
+        <%= f.fields_for :workout_day_items, WorkoutDayItem.new, child_index: 'NEW_RECORD' do |item_form| %>
+          <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
+        <% end %>
+      </template>
+      <!-- Empty state when no exercises -->
+      <div class="text-center py-8 text-base-content/60" data-workout-day-nested-form-target="emptyState">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.586V5L8 4z" />
+        </svg>
+        <p>No exercises added yet</p>
+        <p class="text-sm">Click "Add Exercise" to add your first exercise</p>
+      </div>
     </div>
-    <div data-workout-day-nested-form-target="workoutDayItems" class="space-y-4">
-      <%= f.fields_for :workout_day_items do |item_form| %>
-        <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
-      <% end %>
-    </div>
-    <!-- Template for new exercises -->
-    <template data-workout-day-nested-form-target="template">
-      <%= f.fields_for :workout_day_items, WorkoutDayItem.new, child_index: 'NEW_RECORD' do |item_form| %>
-        <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
-      <% end %>
-    </template>
-    <!-- Empty state when no exercises -->
-    <div class="text-center py-8 text-base-content/60" data-workout-day-nested-form-target="emptyState">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.78 0-2.678-2.153-1.415-3.414l5-5A2 2 0 009 9.586V5L8 4z" />
-      </svg>
-      <p>No exercises added yet</p>
-      <p class="text-sm">Click "Add Exercise" to add your first exercise</p>
-    </div>
-  </div>
+  </details>
 </div>

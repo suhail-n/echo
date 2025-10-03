@@ -1,6 +1,6 @@
 class WorkoutPlansController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_workout_plan, only: %i[ show edit update destroy ]
+  before_action :set_workout_plan, only: %i[ show edit update destroy activate ]
   # GET /workout_plans or /workout_plans.json
   def index
     @workout_plans = current_user.workout_plans.order(:created_at)
@@ -66,10 +66,22 @@ class WorkoutPlansController < ApplicationController
     end
   end
 
+  # POST /workout_plans/1/activate
+  def activate
+    # TODO: Implement workout session creation logic
+    # For now, just redirect with a notice
+    respond_to do |format|
+      format.html { redirect_to @workout_plan, notice: "Workout session activated! (Feature coming soon)", status: :see_other }
+      format.json { render json: { status: "activated", workout_plan_id: @workout_plan.id } }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_workout_plan
-      @workout_plan = current_user.workout_plans.find(params.expect(:id))
+      @workout_plan = current_user.workout_plans
+        .includes(workout_days: { workout_day_items: { exercise: :muscles } })
+        .find(params.expect(:id))
     end
 
     # Only allow a list of trusted parameters through.

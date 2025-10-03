@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :workout_plans
+  resources :workout_plans do
+    member do
+      post :activate
+    end
+  end
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
