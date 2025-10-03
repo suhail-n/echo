@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-    static targets = ["links", "template", "emptyState"]
+    static targets = ["workoutDayItems", "template", "emptyState"]
 
     connect() {
-        this.updateEmptyState()
+        this.updateState()
     }
 
     add(event) {
@@ -12,8 +12,8 @@ export default class extends Controller {
 
         const timestamp = new Date().getTime()
         const content = this.templateTarget.innerHTML.replace(/NEW_RECORD/g, timestamp)
-        this.linksTarget.insertAdjacentHTML("beforeend", content)
-        this.updateEmptyState()
+        this.workoutDayItemsTarget.insertAdjacentHTML("beforeend", content)
+        this.updateState()
     }
 
     remove(event) {
@@ -36,10 +36,25 @@ export default class extends Controller {
             const requiredFields = wrapper.querySelectorAll('input[required], select[required], textarea[required]')
             requiredFields.forEach(field => field.removeAttribute('required'))
         }
+        this.updateState()
+    }
+    updateState() {
         this.updateEmptyState()
+        this.updateOrderState()
     }
     updateEmptyState() {
-        const visibleItems = this.linksTarget.querySelectorAll('.workout-exercise-item:not([style*="display: none"])');
+        const visibleItems = this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item:not([style*="display: none"])');
         this.emptyStateTarget.style.display = visibleItems.length > 0 ? "none" : "block";
+    }
+
+    updateOrderState() {
+        this.workoutDayItemsTarget
+            .querySelectorAll('.workout-exercise-item:not([style*="display: none"])')
+            .forEach((wrapper, index) => {
+                const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
+                if (orderInput) {
+                    orderInput.value = index + 1
+                }
+            });
     }
 }

@@ -1,4 +1,4 @@
-<div class="workout-day-wrapper card bg-base-200 shadow-md p-4 space-y-4" data-controller="workout-day-nested-form">
+<div class="workout-day-wrapper card bg-base-200 shadow-md p-4 space-y-4" data-new-record="<%= f.object.new_record? %>" data-controller="workout-day-nested-form">
   <div class="flex justify-between items-center">
     <%= f.text_field :name, 
         placeholder: "Day Name (e.g., 'Push Day', 'Pull Day', 'Leg Day')", 
@@ -34,7 +34,7 @@
         Add Exercise
       </button>
     </div>
-    <div data-workout-day-nested-form-target="links" class="space-y-4">
+    <div data-workout-day-nested-form-target="workoutDayItems" class="space-y-4">
       <%= f.fields_for :workout_day_items do |item_form| %>
         <%= render 'workout_day_items/workout_day_item_fields', form: item_form %>
       <% end %>

@@ -4,7 +4,7 @@ export default class extends Controller {
     static targets = ["container", "template", "emptyState"]
 
     connect() {
-        this.updateEmptyState()
+        this.updateState()
     }
 
     add(event) {
@@ -25,8 +25,7 @@ export default class extends Controller {
         this.containerTarget.appendChild(wrapper.firstElementChild)
 
         // Update the empty state visibility
-        this.updateEmptyState()
-        this.updateOrderState()
+        this.updateState()
     }
 
     remove(event) {
@@ -34,8 +33,10 @@ export default class extends Controller {
 
         const workoutDayWrapper = event.target.closest('.workout-day-wrapper')
         const destroyInput = workoutDayWrapper.querySelector('input[name*="_destroy"]')
-
-        if (destroyInput) {
+        if (workoutDayWrapper.dataset.newRecord === "true") {
+            // If this is a new record, just remove it from the DOM
+            workoutDayWrapper.remove()
+        } else {
             // If this is an existing record, mark it for destruction
             destroyInput.value = '1'
             workoutDayWrapper.style.display = 'none'
@@ -43,20 +44,19 @@ export default class extends Controller {
             // Remove required attributes from hidden fields to prevent validation errors
             const requiredFields = workoutDayWrapper.querySelectorAll('input[required], select[required], textarea[required]')
             requiredFields.forEach(field => field.removeAttribute('required'))
-        } else {
-            // If this is a new record, just remove it from the DOM
-            workoutDayWrapper.remove()
         }
 
         // Update the empty state visibility
-        this.updateEmptyState()
-        this.updateOrderState()
+        this.updateState()
     }
 
     updateOrderState() {
-        const workoutDayWrappers = Array.from(this.containerTarget.querySelectorAll('.workout-day-wrapper > input[type="hidden"][name*="order"]'))
-        workoutDayWrappers.forEach((input, index) => {
-            input.value = index + 1
+        const visibleWorkoutDays = this.containerTarget.querySelectorAll('.workout-day-wrapper:not([style*="display: none"])')
+        visibleWorkoutDays.forEach((wrapper, index) => {
+            const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
+            if (orderInput) {
+                orderInput.value = index + 1
+            }
         })
     }
 
@@ -68,5 +68,10 @@ export default class extends Controller {
         } else {
             this.emptyStateTarget.style.display = 'none'
         }
+    }
+
+    updateState() {
+        this.updateEmptyState()
+        this.updateOrderState()
     }
 }

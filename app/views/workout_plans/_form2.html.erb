@@ -81,6 +81,9 @@
         <%= form.fields_for :workout_days, WorkoutDay.new, child_index: 'NEW_RECORD' do |day_form| %>
           <%= render 'workout_days/workout_days_fields', f: day_form %>
         <% end %>
+        <!-- Hidden fields for Rails nested attributes -->
+        <%= form.hidden_field :_destroy %>
+        <%= form.hidden_field :order %>
       </template>
       <div class="text-center py-8 text-base-content/60" data-workout-days-target="emptyState">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
