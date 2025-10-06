@@ -66,3 +66,39 @@ The database schema is defined in the `ERD.dbml` file. You can visualize it usin
 - [ ] Create workout session start and end functionality
 - [x] add exercise search functionality when adding an exercise to a workout day item
 - [x] Change the add exercises UI to make it more mobile and user friendly
+
+## Future Work: Profile Page Structure
+
+The profile page should include comprehensive user settings and preferences to enhance the workout tracking experience:
+
+```
+Profile Settings
+├── Personal Information
+│   ├── Display Name
+│   ├── Email
+│   └── Height
+├── Body Metrics
+│   ├── Current Weight
+│   ├── Target Weight (optional)
+│   └── Body Measurements (arm size, chest, waist, etc.)
+├── App Preferences
+│   ├── Theme (Light/Dark Mode)
+│   ├── Units (Metric/Imperial)
+│   └── Default Rest Timer Duration
+├── Security
+│   ├── Change Password
+│   └── Two-Factor Authentication (future enhancement)
+└── Account Actions
+    ├── Export Data (workout history, metrics)
+    ├── Sign Out
+    └── Delete Account
+```
+
+### Key Features to Implement:
+
+- **Body Metrics Management**: Essential for fitness tracking progression
+- **Units Preference**: Affects entire workout experience (kg/lbs, cm/inches)
+- **Rest Timer Defaults**: Improves workout session UX
+- **Theme Toggle**: Light/Dark mode for better user experience
+- **Data Export**: Allow users to export their workout data
+- **Progressive Enhancement**: Start with core features, expand over time
