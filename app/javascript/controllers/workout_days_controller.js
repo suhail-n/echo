@@ -1,10 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
+import Sortable from "sortablejs"
 
 export default class extends Controller {
     static targets = ["container", "template", "emptyState"]
 
     connect() {
+        this.initializeSortable()
         this.updateState()
+    }
+
+    initializeSortable() {
+        this.sortable = Sortable.create(this.containerTarget, {
+            animation: 150,
+            ghostClass: "opacity-50",
+            chosenClass: "ring-2",
+            dragClass: "shadow-xl",
+            handle: ".drag-handle", // Only allow dragging by the handle
+            onEnd: (event) => {
+                this.updateOrderState()
+            }
+        })
     }
 
     add(event) {
@@ -73,5 +88,11 @@ export default class extends Controller {
     updateState() {
         this.updateEmptyState()
         this.updateOrderState()
+    }
+
+    disconnect() {
+        if (this.sortable) {
+            this.sortable.destroy()
+        }
     }
 }
