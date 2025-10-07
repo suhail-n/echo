@@ -2,11 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 import Sortable from "sortablejs"
 
 export default class extends Controller {
-    static targets = ["container", "template", "emptyState"]
+    static targets = ["container", "template", "emptyState", "reorderToggle"]
 
     connect() {
         this.initializeSortable()
         this.updateState()
+        // Initialize reorder mode state
+        this.isReorderMode = false
+        this.updateReorderModeUI()
     }
 
     initializeSortable() {
@@ -16,6 +19,7 @@ export default class extends Controller {
             chosenClass: "ring-2",
             dragClass: "shadow-xl",
             handle: ".drag-handle", // Only allow dragging by the handle
+            disabled: true, // Start with dragging disabled
             onEnd: (event) => {
                 this.updateOrderState()
             }
@@ -41,6 +45,9 @@ export default class extends Controller {
 
         // Update the empty state visibility
         this.updateState()
+
+        // Update reorder mode UI for new elements
+        this.updateReorderModeUI()
     }
 
     remove(event) {
@@ -88,6 +95,49 @@ export default class extends Controller {
     updateState() {
         this.updateEmptyState()
         this.updateOrderState()
+    }
+
+    toggleReorderMode(event) {
+        this.isReorderMode = event.target.checked
+
+        if (this.isReorderMode) {
+            // Enable reorder mode
+            this.containerTarget.classList.add('reorder-mode')
+            this.sortable.option("disabled", false) // Enable dragging
+        } else {
+            // Disable reorder mode
+            this.containerTarget.classList.remove('reorder-mode')
+            this.sortable.option("disabled", true) // Disable dragging
+        }
+
+        this.updateReorderModeUI()
+    }
+
+    updateReorderModeUI() {
+        // Show/hide elements based on reorder mode
+        const allWrappers = this.containerTarget.querySelectorAll('.workout-day-wrapper')
+
+        allWrappers.forEach(wrapper => {
+            const dragHandle = wrapper.querySelector('.drag-handle')
+            const editableElements = wrapper.querySelectorAll('.reorder-hide')
+            const exerciseDetails = wrapper.querySelector('details')
+
+            if (this.isReorderMode) {
+                // Show drag handle
+                if (dragHandle) dragHandle.style.display = 'flex'
+                // Hide editable elements
+                editableElements.forEach(el => el.style.display = 'none')
+                // Collapse exercise details
+                if (exerciseDetails) exerciseDetails.removeAttribute('open')
+            } else {
+                // Hide drag handle
+                if (dragHandle) dragHandle.style.display = 'none'
+                // Show editable elements
+                editableElements.forEach(el => el.style.display = '')
+                // Expand exercise details
+                if (exerciseDetails) exerciseDetails.setAttribute('open', '')
+            }
+        })
     }
 
     disconnect() {

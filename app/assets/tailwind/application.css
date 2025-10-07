@@ -25,3 +25,24 @@
 details[open] .details-chevron {
     transform: rotate(90deg);
 }
+
+/* Reorder Mode Styles */
+.reorder-mode .workout-day-wrapper {
+    /* More compact padding in reorder mode */
+    @apply bg-base-100 border border-base-300;
+}
+
+.reorder-mode .workout-day-wrapper .card-body {
+    /* Reduce padding for more compact look */
+    @apply p-3 pb-3;
+}
+
+.reorder-mode .workout-day-wrapper {
+    /* Smaller margin between cards */
+    margin-bottom: 0.5rem;
+}
+
+/* Drag handle hover effect in reorder mode */
+.reorder-mode .drag-handle:hover {
+    @apply text-primary bg-primary/10 rounded;
+}
