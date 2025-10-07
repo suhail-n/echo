@@ -1,0 +1,101 @@
+<div class="container mx-auto px-4 py-6 max-w-2xl" data-controller="profile">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold text-base-content mb-2">Profile Settings</h1>
+    <p class="text-base-content/70">Manage your account preferences and settings</p>
+  </div>
+  <!-- Profile Card -->
+  <div class="card bg-base-100 shadow-lg">
+    <div class="card-body">
+      <!-- User Info Section -->
+      <div class="mb-6">
+        <h2 class="card-title text-xl mb-4">Account Information</h2>
+        <div class="space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="avatar avatar-placeholder">
+              <div class="bg-primary text-primary-content rounded-full w-12 h-12">
+                <span class="text-xl font-bold"><%= @user.email.first.upcase %></span>
+              </div>
+            </div>
+            <div>
+              <p class="font-medium text-base-content"><%= @user.email %></p>
+              <p class="text-sm text-base-content/70">Member since <%= @user.created_at.strftime("%B %Y") %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Theme Toggle Section -->
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-4">Appearance</h3>
+        <div class="flex flex-col md:items-center md:justify-between md:flex-row">
+          <div>
+            <p class="font-medium">Theme</p>
+            <p class="text-sm text-base-content/70">Choose your preferred theme</p>
+          </div>
+          <div class="flex flex-col gap-2">
+            <div class="join" data-profile-target="themeToggle">
+              <input 
+                type="radio" 
+                name="theme" 
+                value="light" 
+                aria-label="Light theme" 
+                class="join-item btn btn-sm theme-controller" 
+                data-action="click->theme#changeTheme"
+              />
+              <input 
+                type="radio" 
+                name="theme" 
+                value="dracula" 
+                aria-label="Dark theme" 
+                class="join-item btn btn-sm theme-controller"
+                data-action="click->theme#changeTheme"
+              />
+              <input 
+                type="radio" 
+                name="theme" 
+                value="" 
+                aria-label="System theme" 
+                class="join-item btn btn-sm theme-controller"
+                data-action="click->theme#changeTheme"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <!-- Actions Section -->
+      <div class="space-y-4">
+        <h3 class="text-lg font-semibold">Account Actions</h3>
+        <!-- Change Password Button -->
+        <div class="flex items-center justify-between p-4 bg-base-200 rounded-lg">
+          <div>
+            <p class="font-medium">Change Password</p>
+            <p class="text-sm text-base-content/70">Update your password</p>
+          </div>
+          <%= link_to edit_user_registration_path, class: "btn btn-primary btn-sm" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+            </svg>
+            Change Password
+          <% end %>
+        </div>
+        <!-- Sign Out Button -->
+        <div class="flex items-center justify-between p-4 bg-base-200 rounded-lg">
+          <div>
+            <p class="font-medium">Sign Out</p>
+            <p class="text-sm text-base-content/70">Sign out of your account</p>
+          </div>
+          <%= button_to destroy_user_session_path, method: :delete, class: "btn btn-outline btn-sm" do %>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            Sign Out
+          <% end %>
+        </div>
+        <!-- Delete Account Button -->
+        <%= render 'profiles/delete_account' %>
+      </div>
+    </div>
+  </div>
+</div>

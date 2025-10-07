@@ -18,10 +18,10 @@
     <%= javascript_importmap_tags %>
   </head>
   <body>
-    <main class="bg-base-200 min-h-screen">
+    <main class="bg-base-200 min-h-screen" data-controller="theme">
       <div class="navbar bg-base-100 shadow-lg lg:px-32">
         <div class="navbar-start">
-          <%= link_to "Echo", root_path, data: { turbo: false }, class: "btn btn-ghost text-xl" %>
+          <%= link_to "Echo", root_path, data: { turbo: true }, class: "btn btn-ghost text-xl" %>
         </div>
         <div class="navbar-center">
           <!-- Empty center section -->

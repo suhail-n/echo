@@ -7,13 +7,15 @@ class ApplicationController < ActionController::Base
   def layout_by_resource
     if controller_name == "landing"
       "landing"
-    elsif devise_controller?
+    elsif devise_controller? and action_name != "edit_user_registration"
+      # use auth_layout if page is not edit_user_registration_path
       "auth_layout"
     else
       "application"
     end
   end
 
+  protected
   # Devise: redirect users to workout plans after sign in/out
   def after_sign_in_path_for(resource)
     workout_plans_path
@@ -22,5 +24,9 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     # signin page
     new_user_session_path
+  end
+
+  def after_sign_up_path_for(resource)
+    new_user_session_path # Redirects to sign-in page
   end
 end

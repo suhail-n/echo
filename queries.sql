@@ -1,0 +1,2 @@
+-- get all workout plans with their associated workout days
+SELECT wp.name, wp.user_id, wd.name, wd.`order`, e.name, wdi.`order`, wdi.planned_sets, wdi.reps from workout_plans wp JOIN workout_days wd ON wp.id = wd.workout_plan_id JOIN workout_day_items wdi ON wd.id = wdi.workout_day_id JOIN exercises e ON wdi.exercise_id = e.id;
