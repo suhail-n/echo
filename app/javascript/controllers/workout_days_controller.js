@@ -21,7 +21,8 @@ export default class extends Controller {
             handle: ".drag-handle", // Only allow dragging by the handle
             disabled: true, // Start with dragging disabled
             onEnd: (event) => {
-                this.updateOrderState()
+                // this.updateOrderState()
+                setTimeout(() => this.updateOrderState(), 0);
             }
         })
     }
@@ -75,7 +76,7 @@ export default class extends Controller {
     updateOrderState() {
         const visibleWorkoutDays = this.containerTarget.querySelectorAll('.workout-day-wrapper:not([style*="display: none"])')
         visibleWorkoutDays.forEach((wrapper, index) => {
-            const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
+            const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"][class*="workout-item-order-field"]')
             if (orderInput) {
                 orderInput.value = index + 1
             }

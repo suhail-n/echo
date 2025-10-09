@@ -1,11 +1,28 @@
 import { Controller } from "@hotwired/stimulus"
+import Sortable from "sortablejs"
 
 export default class extends Controller {
     static targets = ["workoutDayItems", "template", "emptyState"]
 
     connect() {
-        this.updateState()
+        // this.initializeSortable();
+        this.updateState();
         this.isReorderMode = false;
+    }
+
+    initializeSortable() {
+        this.sortable = Sortable.create(this.workoutDayItemsTarget, {
+            animation: 150,
+            ghostClass: "opacity-50",
+            chosenClass: "ring-2",
+            dragClass: "shadow-xl",
+            dragHandle: ".workoutItemDragHandle", // Only allow dragging by the handle
+            fallbackOnBody: false,
+            group: "nested",
+            onEnd: (event) => {
+                setTimeout(() => this.updateOrderState(), 0);
+            }
+        })
     }
 
     add(event) {
@@ -54,13 +71,19 @@ export default class extends Controller {
     }
 
     updateOrderState() {
+        console.log("calling updateOrderState");
+        const found = this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item:not([style*="display: none"])');
+        console.log("found items:", found);
         this.workoutDayItemsTarget
             .querySelectorAll('.workout-exercise-item:not([style*="display: none"])')
             .forEach((wrapper, index) => {
                 const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
+                console.log("updating order for:", orderInput);
+                console.log(`current order: ${orderInput.value}`);
                 if (orderInput) {
                     orderInput.value = index + 1
                 }
+                console.log(`new order: ${orderInput.value}`);
             });
     }
     /**
@@ -78,7 +101,7 @@ export default class extends Controller {
     }
     updateReorderModeUI() {
         this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item').forEach(wrapper => {
-            const dragHandle = wrapper.querySelector('.drag-handle')
+            const dragHandle = wrapper.querySelector('.workoutItemDragHandle')
             const setsRepsContainer = wrapper.querySelector('.flex.gap-3')
             const exerciseEditButton = wrapper.querySelector('[data-action*="exercise-selection#openModal"]')
             const deleteButton = wrapper.querySelector('[data-action*="workout-day-nested-form#remove"]')
@@ -161,5 +184,10 @@ export default class extends Controller {
                 }
             }
         })
+    }
+    disconnect() {
+        if (this.sortable) {
+            this.sortable.destroy()
+        }
     }
 }

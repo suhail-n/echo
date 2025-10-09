@@ -1,4 +1,4 @@
-<div class="workout-day-wrapper card bg-base-200 shadow-md" data-new-record="<%= f.object.new_record? %>" data-controller="workout-day-nested-form">
+<div class="workout-day-wrapper card bg-base-200 shadow-md" data-new-record="<%= f.object.new_record? %>">
   <!-- Day Header - Always Visible -->
   <div class="card-body p-4 pb-2">
     <div class="flex justify-between items-center">
@@ -25,10 +25,10 @@
     </div>
     <!-- Hidden fields for Rails nested attributes -->
     <%= f.hidden_field :_destroy %>
-    <%= f.hidden_field :order %>
+    <%= f.hidden_field :order, class: 'workout-item-order-field' %>
   </div>
   <!-- Collapsible Exercises Section using HTML details/summary -->
-  <details class="px-4 pb-4 reorder-hide" open>
+  <details class="px-4 pb-4 reorder-hide" open data-controller="workout-day-nested-form">
     <summary class="cursor-pointer py-2 flex items-center justify-between hover:bg-base-300/50 rounded px-2 -mx-2 list-none">
       <div class="flex items-center">
         <!-- Collapse/Expand Chevron -->
