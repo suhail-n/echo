@@ -11,7 +11,11 @@ export default class extends Controller {
     }
 
     initializeSortable() {
-        console.log('connected to nested');
+        if (this.nestedSortable) {
+            console.debug("Nested sortable already initialized, skipping re-initialization.");
+            return;
+        };
+        console.debug('connected to nested');
         this.nestedSortable = Sortable.create(this.workoutDayItemsTarget, {
             animation: 150,
             ghostClass: "opacity-50",
@@ -74,19 +78,19 @@ export default class extends Controller {
     }
 
     updateOrderState() {
-        console.log("calling updateOrderState");
+        console.debug("calling updateOrderState");
         const found = this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item:not([style*="display: none"])');
-        // console.log("found items:", found);
+        // console.debug("found items:", found);
         this.workoutDayItemsTarget
             .querySelectorAll('.workout-exercise-item:not([style*="display: none"])')
             .forEach((wrapper, index) => {
                 const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
-                // console.log("updating order for:", orderInput);
-                // console.log(`current order: ${orderInput.value}`);
+                // console.debug("updating order for:", orderInput);
+                // console.debug(`current order: ${orderInput.value}`);
                 if (orderInput) {
                     orderInput.value = index + 1
                 }
-                // console.log(`new order: ${orderInput.value}`);
+                // console.debug(`new order: ${orderInput.value}`);
             });
     }
     /**
@@ -197,7 +201,7 @@ export default class extends Controller {
         })
     }
     disconnect() {
-        console.log("disconnecting from nested");
+        console.debug("disconnecting from nested");
         // Add a small delay to check if we're really being disconnected
         // or if this is just a temporary DOM manipulation from dragging
         setTimeout(() => {
@@ -206,13 +210,13 @@ export default class extends Controller {
                 this.hasWorkoutDayItemsTarget &&
                 document.contains(this.workoutDayItemsTarget);
             if (!stillConnected) {
-                console.log("Actually disconnecting - destroying sortable");
+                console.debug("Actually disconnecting - destroying sortable");
                 if (this.nestedSortable) {
                     this.nestedSortable.destroy();
                     this.nestedSortable = null;
                 }
             } else {
-                console.log("False disconnect - element still in DOM, re-initializing sortable");
+                console.debug("False disconnect - element still in DOM, re-initializing sortable");
                 // Re-initialize if needed
                 if (!this.nestedSortable) {
                     this.initializeSortable();
