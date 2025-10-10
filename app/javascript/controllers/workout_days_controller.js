@@ -20,6 +20,9 @@ export default class extends Controller {
             dragClass: "shadow-xl",
             handle: ".drag-handle", // Only allow dragging by the handle
             disabled: true, // Start with dragging disabled
+            group: "workout-days",
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
             onEnd: (event) => {
                 // this.updateOrderState()
                 setTimeout(() => this.updateOrderState(), 0);
@@ -142,8 +145,25 @@ export default class extends Controller {
     }
 
     disconnect() {
-        if (this.sortable) {
-            this.sortable.destroy()
-        }
+        console.log("disconneting from workout days");
+        setTimeout(() => {
+            // Only destroy if the element is actually no longer in the DOM
+            const stillConnected = document.contains(this.element) &&
+                this.hasContainerTarget &&
+                document.contains(this.containerTargetTarget);
+            if (!stillConnected) {
+                console.log("Actually disconnecting workout day - destroying sortable");
+                if (this.sortable) {
+                    this.sortable.destroy();
+                    this.sortable = null;
+                }
+            } else {
+                console.log("False disconnect workout day - element still in DOM, re-initializing sortable");
+                // Re-initialize if needed
+                if (!this.sortable) {
+                    this.initializeSortable();
+                }
+            }
+        }, 10);
     }
 }

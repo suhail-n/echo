@@ -5,20 +5,22 @@ export default class extends Controller {
     static targets = ["workoutDayItems", "template", "emptyState"]
 
     connect() {
-        // this.initializeSortable();
+        this.initializeSortable();
         this.updateState();
         this.isReorderMode = false;
     }
 
     initializeSortable() {
-        this.sortable = Sortable.create(this.workoutDayItemsTarget, {
+        console.log('connected to nested');
+        this.nestedSortable = Sortable.create(this.workoutDayItemsTarget, {
             animation: 150,
             ghostClass: "opacity-50",
             chosenClass: "ring-2",
             dragClass: "shadow-xl",
             dragHandle: ".workoutItemDragHandle", // Only allow dragging by the handle
-            fallbackOnBody: false,
-            group: "nested",
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
+            group: "exercise-items",
             onEnd: (event) => {
                 setTimeout(() => this.updateOrderState(), 0);
             }
@@ -73,17 +75,17 @@ export default class extends Controller {
     updateOrderState() {
         console.log("calling updateOrderState");
         const found = this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item:not([style*="display: none"])');
-        console.log("found items:", found);
+        // console.log("found items:", found);
         this.workoutDayItemsTarget
             .querySelectorAll('.workout-exercise-item:not([style*="display: none"])')
             .forEach((wrapper, index) => {
                 const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
-                console.log("updating order for:", orderInput);
-                console.log(`current order: ${orderInput.value}`);
+                // console.log("updating order for:", orderInput);
+                // console.log(`current order: ${orderInput.value}`);
                 if (orderInput) {
                     orderInput.value = index + 1
                 }
-                console.log(`new order: ${orderInput.value}`);
+                // console.log(`new order: ${orderInput.value}`);
             });
     }
     /**
@@ -186,8 +188,27 @@ export default class extends Controller {
         })
     }
     disconnect() {
-        if (this.sortable) {
-            this.sortable.destroy()
-        }
+        console.log("disconnecting from nested");
+        // Add a small delay to check if we're really being disconnected
+        // or if this is just a temporary DOM manipulation from dragging
+        setTimeout(() => {
+            // Only destroy if the element is actually no longer in the DOM
+            const stillConnected = document.contains(this.element) &&
+                this.hasWorkoutDayItemsTarget &&
+                document.contains(this.workoutDayItemsTarget);
+            if (!stillConnected) {
+                console.log("Actually disconnecting - destroying sortable");
+                if (this.nestedSortable) {
+                    this.nestedSortable.destroy();
+                    this.nestedSortable = null;
+                }
+            } else {
+                console.log("False disconnect - element still in DOM, re-initializing sortable");
+                // Re-initialize if needed
+                if (!this.nestedSortable) {
+                    this.initializeSortable();
+                }
+            }
+        }, 10);
     }
 }
