@@ -17,8 +17,9 @@ export default class extends Controller {
             ghostClass: "opacity-50",
             chosenClass: "ring-2",
             dragClass: "shadow-xl",
-            dragHandle: ".workoutItemDragHandle", // Only allow dragging by the handle
+            handle: ".workoutItemDragHandle", // Only allow dragging by the handle
             fallbackOnBody: true,
+            forceFallback: true,
             swapThreshold: 0.65,
             group: "exercise-items",
             onEnd: (event) => {
@@ -109,6 +110,7 @@ export default class extends Controller {
             const deleteButton = wrapper.querySelector('[data-action*="workout-day-nested-form#remove"]')
             const emptyState = wrapper.querySelector('[data-exercise-selection-target="emptyState"]')
             const exerciseNameContainer = wrapper.querySelector('[data-exercise-selection-target="selectedExercise"] .flex')
+            const exerciseMuscles = wrapper.querySelector('[data-exercise-selection-target="exerciseMuscles"]')
 
             if (this.isReorderMode) {
                 // Show drag handle
@@ -121,6 +123,9 @@ export default class extends Controller {
 
                 // Hide exercise edit button
                 if (exerciseEditButton) exerciseEditButton.style.display = 'none'
+
+                // hide exercise muscles
+                if (exerciseMuscles) exerciseMuscles.classList.add('hidden')
 
                 // Hide empty state button if visible
                 if (emptyState && !emptyState.classList.contains('hidden')) {
@@ -146,6 +151,7 @@ export default class extends Controller {
                     exerciseNameContainer.parentElement.style.display = 'flex'
                     exerciseNameContainer.parentElement.style.justifyContent = 'space-between'
                     exerciseNameContainer.parentElement.style.alignItems = 'center'
+
                 }
             } else {
                 // Hide drag handle
@@ -163,6 +169,9 @@ export default class extends Controller {
                 if (emptyState && !emptyState.classList.contains('hidden')) {
                     emptyState.style.display = ''
                 }
+
+                // show exercise muscles
+                if (exerciseMuscles) exerciseMuscles.classList.remove('hidden')
 
                 // Move delete button back to its original position
                 if (deleteButton && setsRepsContainer) {

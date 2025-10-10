@@ -10,13 +10,13 @@
     <div data-exercise-selection-target="selectedExercise" class="<%= 'hidden' if form.object.exercise_id.blank? %>">
       <div class="flex items-center justify-between">
         <div class="flex">
-          <div class="drag-handle workoutItemDragHandle cursor-grab active:cursor-grabbing p-1 text-base-content/60 hover:text-base-content mr-2" style="display: none;">
+          <div class="workoutItemDragHandle cursor-grab active:cursor-grabbing p-1 text-base-content/60 hover:text-base-content mr-2" style="display: none;">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
             </svg>
           </div>
           <div>
-            <h4 class="font-semibold text-base-content" data-exercise-selection-target="exerciseName">
+            <h4 class="font-semibold text-base-content pe-1" data-exercise-selection-target="exerciseName">
               <%= form.object.exercise&.name %>
             </h4>
             <p class="text-sm text-base-content/60" data-exercise-selection-target="exerciseMuscles">
