@@ -103,45 +103,15 @@ export default class extends Controller {
 
     toggleReorderMode(event) {
         this.isReorderMode = event.target.checked
-
-        if (this.isReorderMode) {
-            // Enable reorder mode
-            this.containerTarget.classList.add('reorder-mode')
-            this.sortable.option("disabled", false) // Enable dragging
-        } else {
-            // Disable reorder mode
-            this.containerTarget.classList.remove('reorder-mode')
-            this.sortable.option("disabled", true) // Disable dragging
-        }
-
+        this.sortable.option("disabled", !this.isReorderMode)
         this.updateReorderModeUI()
     }
 
     updateReorderModeUI() {
         // Show/hide elements based on reorder mode
-        const allWrappers = this.containerTarget.querySelectorAll('.workout-day-wrapper')
-
-        allWrappers.forEach(wrapper => {
-            const dragHandle = wrapper.querySelector('.drag-handle')
-            const editableElements = wrapper.querySelectorAll('.reorder-hide')
-            const exerciseDetails = wrapper.querySelector('details')
-
-            if (this.isReorderMode) {
-                // Show drag handle
-                if (dragHandle) dragHandle.style.display = 'flex'
-                // Hide editable elements
-                editableElements.forEach(el => el.style.display = 'none')
-                // Collapse exercise details
-                if (exerciseDetails) exerciseDetails.removeAttribute('open')
-            } else {
-                // Hide drag handle
-                if (dragHandle) dragHandle.style.display = 'none'
-                // Show editable elements
-                editableElements.forEach(el => el.style.display = '')
-                // Expand exercise details
-                if (exerciseDetails) exerciseDetails.setAttribute('open', '')
-            }
-        })
+        this.containerTarget
+            .querySelectorAll('.workout-day-wrapper')
+            .forEach(wrapper => wrapper.classList.toggle('reorder-mode', this.isReorderMode));
     }
 
     disconnect() {

@@ -8,3 +8,15 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+.workout-day-wrapper.reorder-mode .drag-handle {
+    display: flex;
+}
+
+.workout-day-wrapper.reorder-mode.reorder-hide {
+    display: none;
+}
+
+.workout-day-wrapper.reorder-mode .exercise-section {
+    display: none;
+}

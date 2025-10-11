@@ -3,7 +3,7 @@
   <div class="card-body p-4 pb-2">
     <div class="flex justify-between items-center">
       <!-- Drag Handle - Initially hidden -->
-      <div class="drag-handle cursor-grab active:cursor-grabbing p-1 text-base-content/60 hover:text-base-content mr-2" style="display: none;">
+      <div class="hidden drag-handle cursor-grab active:cursor-grabbing p-1 text-base-content/60 hover:text-base-content mr-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
         </svg>
@@ -28,7 +28,7 @@
     <%= f.hidden_field :order, class: 'workout-item-order-field' %>
   </div>
   <!-- Collapsible Exercises Section using HTML details/summary -->
-  <details class="px-4 pb-4 reorder-hide" open data-controller="workout-day-nested-form">
+  <details class="px-4 pb-4 exercise-section" open data-controller="workout-day-nested-form">
     <summary class="cursor-pointer py-2 flex items-center justify-between hover:bg-base-300/50 rounded px-2 -mx-2 list-none">
       <div class="flex items-center">
         <!-- Collapse/Expand Chevron -->
