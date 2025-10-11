@@ -13,6 +13,10 @@ export default class extends Controller {
     }
 
     initializeSortable() {
+        if (this.sortable) {
+            console.debug("Sortable already initialized, skipping re-initialization.");
+            return;
+        };
         this.sortable = Sortable.create(this.containerTarget, {
             animation: 150,
             ghostClass: "opacity-50",

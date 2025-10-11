@@ -27,7 +27,8 @@ details[open] .details-chevron {
 }
 
 /* Reorder Mode Styles */
-.reorder-mode .workout-day-wrapper {
+.reorder-mode .workout-day-wrapper,
+.workout-exercise-item.reorder-mode {
     /* More compact padding in reorder mode */
     @apply bg-base-100 border border-base-300;
 }
@@ -43,6 +44,7 @@ details[open] .details-chevron {
 }
 
 /* Drag handle hover effect in reorder mode */
-.reorder-mode .drag-handle:hover {
+.reorder-mode .drag-handle:hover,
+.workout-exercise-item.reorder-mode .workoutItemDragHandle:hover {
     @apply text-primary bg-primary/10 rounded;
 }

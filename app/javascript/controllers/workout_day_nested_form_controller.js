@@ -8,6 +8,7 @@ export default class extends Controller {
         this.initializeSortable();
         this.updateState();
         this.isReorderMode = false;
+        this.updateReorderModeUI();
     }
 
     initializeSortable() {
@@ -22,6 +23,7 @@ export default class extends Controller {
             chosenClass: "ring-2",
             dragClass: "shadow-xl",
             handle: ".workoutItemDragHandle", // Only allow dragging by the handle
+            disabled: true, // Start with dragging disabled
             fallbackOnBody: true,
             forceFallback: true,
             swapThreshold: 0.65,
@@ -99,107 +101,16 @@ export default class extends Controller {
      */
     toggleExerciseReorderMode(event) {
         this.isReorderMode = event.target.checked;
-        if (this.isReorderMode) {
-            this.workoutDayItemsTarget.classList.add("reorder-mode");
-        } else {
-            this.workoutDayItemsTarget.classList.remove("reorder-mode");
-        }
+        this.workoutDayItemsTarget.classList.toggle("reorder-mode", this.isReorderMode);
+        this.nestedSortable.option("disabled", !this.isReorderMode)
         this.updateReorderModeUI();
     }
     updateReorderModeUI() {
-        this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item').forEach(wrapper => {
-            const dragHandle = wrapper.querySelector('.workoutItemDragHandle')
-            const setsRepsContainer = wrapper.querySelector('.flex.gap-3')
-            const exerciseEditButton = wrapper.querySelector('[data-action*="exercise-selection#openModal"]')
-            const deleteButton = wrapper.querySelector('[data-action*="workout-day-nested-form#remove"]')
-            const emptyState = wrapper.querySelector('[data-exercise-selection-target="emptyState"]')
-            const exerciseNameContainer = wrapper.querySelector('[data-exercise-selection-target="selectedExercise"] .flex')
-            const exerciseMuscles = wrapper.querySelector('[data-exercise-selection-target="exerciseMuscles"]')
-
-            if (this.isReorderMode) {
-                // Show drag handle
-                if (dragHandle) dragHandle.style.display = 'flex'
-
-                // Hide sets/reps inputs
-                if (setsRepsContainer) {
-                    setsRepsContainer.style.display = 'none'
-                }
-
-                // Hide exercise edit button
-                if (exerciseEditButton) exerciseEditButton.style.display = 'none'
-
-                // hide exercise muscles
-                if (exerciseMuscles) exerciseMuscles.classList.add('hidden')
-
-                // Hide empty state button if visible
-                if (emptyState && !emptyState.classList.contains('hidden')) {
-                    emptyState.style.display = 'none'
-                }
-
-                // Move delete button to be inline with exercise name
-                if (deleteButton && exerciseNameContainer) {
-                    // Create a container for the delete button if it doesn't exist
-                    let reorderDeleteContainer = wrapper.querySelector('.reorder-delete-container')
-                    if (!reorderDeleteContainer) {
-                        reorderDeleteContainer = document.createElement('div')
-                        reorderDeleteContainer.className = 'reorder-delete-container'
-                        exerciseNameContainer.parentElement.appendChild(reorderDeleteContainer)
-                    }
-
-                    // Move the delete button to the new container and style it appropriately
-                    reorderDeleteContainer.appendChild(deleteButton)
-                    reorderDeleteContainer.style.display = 'flex'
-                    reorderDeleteContainer.style.alignItems = 'center'
-
-                    // Update the parent container to space between elements
-                    exerciseNameContainer.parentElement.style.display = 'flex'
-                    exerciseNameContainer.parentElement.style.justifyContent = 'space-between'
-                    exerciseNameContainer.parentElement.style.alignItems = 'center'
-
-                }
-            } else {
-                // Hide drag handle
-                if (dragHandle) dragHandle.style.display = 'none'
-
-                // Show sets/reps inputs
-                if (setsRepsContainer) {
-                    setsRepsContainer.style.display = ''
-                }
-
-                // Show exercise edit button
-                if (exerciseEditButton) exerciseEditButton.style.display = ''
-
-                // Show empty state button if it should be visible
-                if (emptyState && !emptyState.classList.contains('hidden')) {
-                    emptyState.style.display = ''
-                }
-
-                // show exercise muscles
-                if (exerciseMuscles) exerciseMuscles.classList.remove('hidden')
-
-                // Move delete button back to its original position
-                if (deleteButton && setsRepsContainer) {
-                    const deleteButtonContainer = setsRepsContainer.querySelector('.flex.items-end')
-                    if (deleteButtonContainer) {
-                        deleteButtonContainer.appendChild(deleteButton)
-                    }
-
-                    // Clean up the temporary container
-                    const reorderDeleteContainer = wrapper.querySelector('.reorder-delete-container')
-                    if (reorderDeleteContainer) {
-                        reorderDeleteContainer.remove()
-                    }
-
-                    // Reset the parent container styling
-                    if (exerciseNameContainer) {
-                        exerciseNameContainer.parentElement.style.display = ''
-                        exerciseNameContainer.parentElement.style.justifyContent = ''
-                        exerciseNameContainer.parentElement.style.alignItems = ''
-                    }
-                }
-            }
-        })
+        this.workoutDayItemsTarget
+            .querySelectorAll('.workout-exercise-item')
+            .forEach(wrapper => wrapper.classList.toggle('reorder-mode', this.isReorderMode));
     }
+
     disconnect() {
         console.debug("disconnecting from nested");
         // Add a small delay to check if we're really being disconnected

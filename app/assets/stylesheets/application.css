@@ -9,6 +9,7 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+/* workout day css */
 .workout-day-wrapper.reorder-mode .drag-handle {
     display: flex;
 }
@@ -19,4 +20,44 @@
 
 .workout-day-wrapper.reorder-mode .exercise-section {
     display: none;
+}
+
+/* workout day workout items */
+.workout-exercise-item.reorder-mode .workoutItemDragHandle {
+    display: flex;
+}
+
+.workout-exercise-item.reorder-mode .sets-reps-container {
+    display: none;
+}
+
+.workout-exercise-item.reorder-mode [data-action*="exercise-selection#openModal"] {
+    display: none;
+}
+
+.workout-exercise-item.reorder-mode [data-exercise-selection-target="exerciseMuscles"] {
+    display: none;
+}
+
+.workout-exercise-item.reorder-mode .remove-exercise-button {
+    display: flex;
+}
+
+.workout-exercise-item.reorder-mode [data-exercise-selection-target="selectedExercise"] {
+    display: flex;
+    justify-content: space-between;
+}
+
+.workout-exercise-item.reorder-mode {
+    padding: 0.5rem;
+    margin: 0.25rem 0;
+    ;
+}
+
+.workout-exercise-item.reorder-mode [data-exercise-selection-target="selectedExercise"] {
+    margin: 0;
+}
+
+.workout-exercise-item.reorder-mode .drag-handle {
+    display: flex;
 }
