@@ -29,7 +29,7 @@ export default class extends Controller {
             swapThreshold: 0.65,
             onEnd: (event) => {
                 // this.updateOrderState()
-                setTimeout(() => this.updateOrderState(), 0);
+                setTimeout(() => this.updateOrderState(), 10);
             }
         })
     }

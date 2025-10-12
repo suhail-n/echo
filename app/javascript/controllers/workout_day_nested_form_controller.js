@@ -8,7 +8,6 @@ export default class extends Controller {
         this.initializeSortable();
         this.updateState();
         this.isReorderMode = false;
-        this.updateReorderModeUI();
     }
 
     initializeSortable() {
@@ -29,7 +28,7 @@ export default class extends Controller {
             swapThreshold: 0.65,
             group: "exercise-items",
             onEnd: (event) => {
-                setTimeout(() => this.updateOrderState(), 0);
+                setTimeout(() => this.updateOrderState(), 10);
             }
         })
     }
@@ -81,18 +80,13 @@ export default class extends Controller {
 
     updateOrderState() {
         console.debug("calling updateOrderState");
-        const found = this.workoutDayItemsTarget.querySelectorAll('.workout-exercise-item:not([style*="display: none"])');
-        // console.debug("found items:", found);
         this.workoutDayItemsTarget
             .querySelectorAll('.workout-exercise-item:not([style*="display: none"])')
             .forEach((wrapper, index) => {
                 const orderInput = wrapper.querySelector('input[type="hidden"][name*="order"]')
-                // console.debug("updating order for:", orderInput);
-                // console.debug(`current order: ${orderInput.value}`);
                 if (orderInput) {
                     orderInput.value = index + 1
                 }
-                // console.debug(`new order: ${orderInput.value}`);
             });
     }
     /**
@@ -112,7 +106,6 @@ export default class extends Controller {
     }
 
     disconnect() {
-        console.debug("disconnecting from nested");
         // Add a small delay to check if we're really being disconnected
         // or if this is just a temporary DOM manipulation from dragging
         setTimeout(() => {
