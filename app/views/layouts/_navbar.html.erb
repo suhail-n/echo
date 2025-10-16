@@ -1,4 +1,4 @@
-<nav class="navbar bg-base-100 shadow-sm hidden md:flex sticky top-0 z-10">
+<nav class="navbar bg-base-100 shadow-sm hidden md:flex sticky top-0 z-10 px-10">
   <div class="navbar-start">
     <div class="dropdown md:hidden">
       <div tabindex="0" role="button" class="btn btn-ghost md:hidden">
@@ -27,6 +27,7 @@
   <div class="navbar-end">
     <%= button_to "Sign out", destroy_user_session_path, method: :delete, class: "btn" %>
   </div>
+</div>
 </nav>
 <div class="dock flex md:hidden" data-controller="dock">
   <%= link_to workout_plans_path,

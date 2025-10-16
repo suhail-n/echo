@@ -7,7 +7,7 @@
         <div>
           <h1 class="text-3xl font-bold text-base-content"><%= @workout_plan.name %></h1>
           <div id="flash"></div>
-          <div class="flex gap-2 mt-2">
+          <div class="gap-2 mt-2 hidden sm:flex">
             <% if @workout_plan.is_template? %>
               <span class="badge badge-primary">Template</span>
             <% end %>
@@ -22,11 +22,7 @@
         <!-- Action Buttons -->
         <div class="flex items-center gap-2">
           <!-- Primary Action - Always Visible -->
-          <% if @workout_plan.active? %>
-            <button class="btn btn-primary btn-sm sm:btn-md btn-disabled" disabled>
-              Activate Workout
-            </button>
-          <% else %>
+          <% if !@workout_plan.active? %>
             <button class="btn btn-primary btn-sm sm:btn-md" onclick="activate_modal.showModal()">
               Activate Workout
             </button>
@@ -41,27 +37,40 @@
               data: { turbo_confirm: "Are you sure? This will permanently delete this workout plan." } %>
           </div>
           <!-- Mobile: Icon Buttons -->
-          <div class="flex ml-auto gap-1 sm:hidden">
-            <!-- Edit Button -->
-            <%= link_to edit_workout_plan_path(@workout_plan), 
+          <div class="flex justify-between gap-1 sm:hidden w-full">
+            <div class="gap-2 mt-2 flex">
+              <% if @workout_plan.is_template? %>
+                <span class="badge badge-primary">Template</span>
+              <% end %>
+              <% if @workout_plan.is_published? %>
+                <span class="badge badge-success">Published</span>
+              <% end %>
+              <% if @workout_plan.active? %>
+                <span class="badge badge-success">Active</span>
+              <% end %>
+            </div>
+            <div class="flex ml-auto gap-1 sm:hidden">
+              <!-- Edit Button -->
+              <%= link_to edit_workout_plan_path(@workout_plan), 
               class: "btn btn-ghost btn-sm btn-square tooltip tooltip-bottom",
               data: { tip: "Edit Plan" } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            <% end %>
-            <!-- Delete Button -->
-            <%= button_to @workout_plan, 
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              <% end %>
+              <!-- Delete Button -->
+              <%= button_to @workout_plan, 
               method: :delete, 
               class: "btn btn-ghost btn-sm btn-square text-error hover:bg-error hover:text-error-content tooltip tooltip-bottom",
               data: { 
                 turbo_confirm: "Are you sure? This will permanently delete this workout plan.",
                 tip: "Delete Plan"
               } do %>
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            <% end %>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1-1H9a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
