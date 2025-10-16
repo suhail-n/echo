@@ -68,11 +68,15 @@ class WorkoutPlansController < ApplicationController
 
   # POST /workout_plans/1/activate
   def activate
-    # TODO: Implement workout session creation logic
-    # For now, just redirect with a notice
+    WorkoutPlan.transaction do
+      @workout_plan = WorkoutPlan.find(params[:id])
+      current_user.workout_plans.where.not(id: @workout_plan.id).update_all(active: false)
+      @workout_plan.update!(active: true)
+    end
+
     respond_to do |format|
-      format.html { redirect_to @workout_plan, notice: "Workout session activated! (Feature coming soon)", status: :see_other }
-      format.json { render json: { status: "activated", workout_plan_id: @workout_plan.id } }
+      format.turbo_stream
+      format.html { redirect_to @workout_plan, notice: "Workout plan activated." }
     end
   end
 

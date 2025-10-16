@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :workout_plans do
     member do
-      post :activate
+      patch :activate
     end
   end
   devise_for :users
